@@ -1,0 +1,206 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+        "title": "User API",
+        "description": "User API documentation",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "description": "Local Server",
+            "url": "http://localhost:8000"
+        },
+        {
+            "description": "Remote Server",
+            "url": "https:rpl-rus.com"
+        }
+
+    ],
+    "paths": {
+        "/api/users": {
+            "post": {
+                "tags": [
+                  "Auth"
+                ],
+              "summary": "Create new user",
+              "operationId": "",
+              "requestBody": {
+                "content": {
+                  "application/json": {
+                      "schema": {
+                          "type": "object",
+                          "properties": {
+                              "name": {
+                                  "type": "string",
+                                  "nullable": false
+                              },
+                              "username": {
+                                  "type": "string",
+                                  "nullable": false
+                              },
+                              "password": {
+                                  "type": "string",
+                                  "nullable": false,
+                                  "minLength": 8,
+                                  "default": "string"
+                              },
+                              "avatar": {
+                                  "type": "string",
+                                  "nullable": true
+                              },
+                              "bio": {
+                                  "type": "string",
+                                  "nullable": true
+                              }
+                          }
+                      }
+                  }
+                }
+              },
+              "responses": {
+                  "200": {
+                    "description": "Successfully Registered new user."
+
+                  }
+              }
+            },
+            "get": {
+                "tags": [
+                  "User Management"
+                ],
+              "summary": "Get all users",
+              "operationId": "",
+              "parameters": [
+
+              ],
+              "responses": {
+
+              }
+            }
+        },
+
+        "/api/users/current": {
+            "get": {
+                "tags": [
+                  "Current User"
+                ],
+              "summary": "Get current user",
+              "operationId": "",
+              "parameters": [
+
+              ],
+              "responses": {
+
+              }
+            },
+            "put": {
+                "tags": [
+                  "Current User"
+                ],
+              "summary": "Update current user",
+              "operationId": "",
+              "parameters": [
+
+              ],
+              "responses": {
+
+              }
+            }
+        },
+
+        "/api/users/{userID}": {
+            "get": {
+                "tags": [
+                  "User Management"
+                ],
+              "summary": "Get single user",
+              "operationId": "",
+              "parameters": [
+
+              ],
+              "responses": {
+
+              }
+            },
+            "put": {
+                "tags": [
+                  "User Management"
+                ],
+              "summary": "Update single user",
+              "operationId": "",
+              "parameters": [
+
+              ],
+              "responses": {
+
+              }
+            }
+        },
+
+        "/api/users/login": {
+            "post": {
+                "tags": [
+                  "Auth"
+                ],
+              "summary": "Login",
+              "operationId": "",
+              "requestBody": {
+                "content": {
+                  "application/json": {
+                      "schema": {
+                          "type": "object",
+                          "properties": {
+                              "username": {
+                                  "type": "string",
+                                  "nullable": false
+                              },
+                              "password": {
+                                  "type": "string",
+                                  "nullable": false
+                              }
+
+                          }
+                      },
+                      "examples": {
+                          "user1": {
+                              "description": "Login as customer",
+                              "value": {
+                                  "username": "user1@gmail.com",
+                                  "password": "test1"
+                              }
+                          },
+                          "user2": {
+                              "description": "Login as admin",
+                              "value": {
+                                  "username": "user2@gmail.com",
+                                  "password": "test2"
+                              }
+                          }
+                      }
+                  }
+                }
+              },
+              "responses": {
+
+              }
+            }
+        },
+
+        "/api/users/logout": {
+            "delete" : {
+                "tags": [
+                  "Current User"
+                ],
+              "summary": "Logout",
+              "operationId": "",
+              "parameters": [
+
+              ],
+              "responses": {
+
+              }
+            }
+        }
+
+    }
+}
