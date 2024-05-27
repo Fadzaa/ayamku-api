@@ -34,11 +34,10 @@ Route::group(['prefix' => 'products'], function () {
     Route::get('/terlaris', [\App\Http\Controllers\ProductController::class , 'indexTerlaris']);
     Route::get('/{id}', [\App\Http\Controllers\ProductController::class , 'show']);
 
-    Route::group(['middleware' => 'auth:sanctum'], function () {
-        Route::post('/', [\App\Http\Controllers\ProductController::class , 'store']);
-        Route::put('/{id}', [\App\Http\Controllers\ProductController::class , 'update']);
-        Route::delete('/{id}', [\App\Http\Controllers\ProductController::class , 'destroy']);
-    });
+    Route::post('/', [\App\Http\Controllers\ProductController::class , 'store']);
+    Route::put('/{id}', [\App\Http\Controllers\ProductController::class , 'update']);
+    Route::delete('/{id}', [\App\Http\Controllers\ProductController::class , 'destroy']);
+
 });
 
 

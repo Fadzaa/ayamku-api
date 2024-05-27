@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ProductRequest;
+use App\Http\Requests\ProductRequest\ProductRequest;
+use App\Http\Requests\ProductRequest\ProductUpdateRequest;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
 use Illuminate\Http\JsonResponse;
@@ -14,50 +15,112 @@ class ProductController extends Controller
     {
         $products = Product::all();
 
-        return response()->json(ProductResource::collection($products));
+        return response()->json(
+            [
+                'data' => ProductResource::collection($products),
+            ]
+        );
     }
 
     public function indexGeprek(Request $request) : JsonResponse
     {
+
         $products = Product::all()->where('type', 'geprek');
 
-        if ($request->has('search')){
-            $products = Product::all()->where('name', 'like', '%'.$request->name.'%');
+        if ($request->has('search')) {
+            $search = $request->query('search');
+            $products = $products->filter(function ($product) use ($search) {
+                return false !== stristr($product->name, $search);
+            });
         }
 
-        return response()->json(ProductResource::collection($products));
+        return response()->json(
+            [
+                'data' => ProductResource::collection($products),
+            ]
+        );
     }
 
-    public function indexRicebowl() : JsonResponse
+    public function indexRicebowl(Request $request) : JsonResponse
     {
         $products = Product::all()->where('type', 'ricebowl');
 
-        return response()->json(ProductResource::collection($products));
+
+        if ($request->has('search')) {
+            $search = $request->query('search');
+            $products = $products->filter(function ($product) use ($search) {
+                return false !== stristr($product->name, $search);
+            });
+        }
+
+        return response()->json(
+            [
+                'data' => ProductResource::collection($products),
+            ]
+        );
     }
 
-    public function indexSnack() : JsonResponse
+    public function indexSnack(Request $request) : JsonResponse
     {
         $products = Product::all()->where('type', 'snack');
 
-        return response()->json(ProductResource::collection($products));
+        if ($request->has('search')) {
+            $search = $request->query('search');
+            $products = $products->filter(function ($product) use ($search) {
+                return false !== stristr($product->name, $search);
+            });
+        }
+
+        return response()->json(
+            [
+                'data' => ProductResource::collection($products),
+            ]
+        );
     }
 
-    public function indexMinuman() : JsonResponse
+    public function indexMinuman(Request $request) : JsonResponse
     {
         $products = Product::all()->where('type', 'minuman');
 
-        return response()->json(ProductResource::collection($products));
+        if ($request->has('search')) {
+            $search = $request->query('search');
+            $products = $products->filter(function ($product) use ($search) {
+                return false !== stristr($product->name, $search);
+            });
+        }
+
+        return response()->json(
+            [
+                'data' => ProductResource::collection($products),
+            ]
+        );
     }
 
     public function indexTerlaris() : JsonResponse {
         $products = Product::all()->sortByDesc('total_rating')->take(8);
 
-        return response()->json(ProductResource::collection($products));
+        return response()->json(
+            [
+                'data' => ProductResource::collection($products),
+            ]
+        );
     }
 
-    public function show(Product $product) : JsonResponse
+    public function show($id) : JsonResponse
     {
-        return response()->json(new ProductResource($product));
+        $product = Product::all()->find($id);
+
+        if ($product === null) {
+            return response()->json([
+                'message' => 'Product not found',
+            ], 404);
+        }
+
+        return response()->json(
+            [
+                'data' => new ProductResource($product),
+            ]
+        );
     }
 
     public function store(ProductRequest $request) : JsonResponse
@@ -68,24 +131,48 @@ class ProductController extends Controller
         $product->fill($data);
         $product->save();
 
-        return response()->json(new ProductResource($product), 201);
+        return response()->json([
+            'data' => new ProductResource($product),
+        ], 201);
     }
 
-    public function update(ProductRequest $request, Product $product) : JsonResponse
+    public function update(ProductUpdateRequest $request, $id) : JsonResponse
     {
         $data = $request->validated();
+
+        $product = Product::all()->find($id);
+
+        if ($product === null) {
+            return response()->json([
+                'message' => 'Product not found',
+            ], 404);
+        }
 
         $product->fill($data);
         $product->save();
 
-        return response()->json(new ProductResource($product));
+        return response()->json(
+            [
+                'data' => new ProductResource($product),
+            ]
+        );
     }
 
-    public function destroy(Product $product) : JsonResponse
+    public function destroy($id) : JsonResponse
     {
+        $product = Product::all()->find($id);
+
+        if ($product === null) {
+            return response()->json([
+                'message' => 'Product not found',
+            ], 404);
+        }
+
         $product->delete();
 
-        return response()->json(null, 204);
+        return response()->json([
+            'message' => 'Product successfully deleted',
+        ], 200);
     }
 
 }
