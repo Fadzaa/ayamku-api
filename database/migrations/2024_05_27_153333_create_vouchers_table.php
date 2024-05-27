@@ -13,6 +13,13 @@ return new class extends Migration
     {
         Schema::create('vouchers', function (Blueprint $table) {
             $table->id();
+            $table->string('code')->unique();
+            $table->string('name');
+            $table->text('description')->nullable();
+            $table->integer('discount')->default(0);
+            $table->integer('qty')->default(0);
+            $table->integer('start_date')->default(0);
+            $table->integer('end_date')->default(0);
             $table->timestamps();
         });
     }
