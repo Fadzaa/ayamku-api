@@ -40,4 +40,14 @@ Route::group(['prefix' => 'products'], function () {
 
 });
 
+Route::group(['prefix' => 'promos'], function () {
+    Route::get('/', [\App\Http\Controllers\PromoController::class , 'index']);
+    Route::get('/active', [\App\Http\Controllers\PromoController::class , 'indexActivePromo']);
+
+    Route::post('/', [\App\Http\Controllers\PromoController::class , 'store']);
+    Route::put('/{id}', [\App\Http\Controllers\PromoController::class , 'update']);
+    Route::delete('/{id}', [\App\Http\Controllers\PromoController::class , 'destroy']);
+
+});
+
 
