@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\PromoRequest;
-use App\Http\Requests\PromoUpdateRequest;
+use App\Http\Requests\PromoRequest\PromoRequest;
+use App\Http\Requests\PromoRequest\PromoUpdateRequest;
 use App\Http\Resources\PromoResource;
 use App\Models\Promo;
 use Illuminate\Http\JsonResponse;

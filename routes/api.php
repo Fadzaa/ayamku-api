@@ -50,4 +50,11 @@ Route::group(['prefix' => 'promos'], function () {
 
 });
 
+Route::group(['prefix' => 'post'], function () {
+    Route::get('/', [\App\Http\Controllers\PostController::class , 'index']);
+    Route::post('/', [\App\Http\Controllers\PostController::class , 'store']);
+    Route::put('/{id}', [\App\Http\Controllers\PostController::class , 'update']);
+    Route::delete('/{id}', [\App\Http\Controllers\PostController::class , 'destroy']);
+});
+
 

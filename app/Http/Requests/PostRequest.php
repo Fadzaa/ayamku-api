@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class PromoRequest extends FormRequest
+class PostRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,10 +23,8 @@ class PromoRequest extends FormRequest
     {
         return [
             'name' => 'required|string',
-            'description' => 'required|string',
-            'start_date' => 'required|date',
-            'end_date' => 'required|date',
-            'image' => 'required|string',
+            'major' => 'required|string|in:Animasi 2D,Animasi 3D,PPLG,Teknik Grafika,Design Grafis',
+            'class' => 'required|string|in:10,11,12',
         ];
     }
 }
