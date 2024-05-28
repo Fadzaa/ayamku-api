@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpdateUserRequest;
 use App\Http\Requests\UserRequest\LoginRequest;
 use App\Http\Requests\UserRequest\RegisterRequest;
 use App\Http\Resources\UserResource;
@@ -10,6 +11,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -60,13 +62,18 @@ class UserController extends Controller
         ], 200);
     }
 
-    public function updateUser(Request $request) : JsonResponse
+    public function updateUser(UpdateUserRequest $request) : JsonResponse
     {
+        $data = $request->validated();
+
         $user = User::all()->where('id', Auth::id())->first();
 
-        $user->name = $request->input('name');
-        $user->email = $request->input('email');
-        $user->phone_number = $request->input('phone_number');
+        $user->fill($data);
+
+        if ($request->hasFile('profile_picture')) {
+            $path = $request->file('profile_picture')->storePublicly('profile_pictures', 'public');
+            $user->profile_picture = Storage::url($path);
+        }
 
         $user->save();
 

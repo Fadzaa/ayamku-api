@@ -22,7 +22,7 @@ Route::post('/users', [\App\Http\Controllers\UserController::class , 'register']
 Route::post('/users/login', [\App\Http\Controllers\UserController::class , 'login']);
 
 Route::middleware('auth:sanctum')->get('/users', [\App\Http\Controllers\UserController::class , 'currentUser']);
-Route::middleware('auth:sanctum')->post('/users/logout', [\App\Http\Controllers\UserController::class , 'updateUser']);
+Route::middleware('auth:sanctum')->post('/users', [\App\Http\Controllers\UserController::class , 'updateUser']);
 Route::middleware('auth:sanctum')->delete('/users/logout', [\App\Http\Controllers\UserController::class , 'logout']);
 
 Route::group(['prefix' => 'products'], function () {
