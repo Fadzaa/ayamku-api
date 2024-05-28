@@ -11,28 +11,21 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    public function index() : JsonResponse
+    public function index(Request $request) : JsonResponse
     {
-        $products = Product::all();
-
-        return response()->json(
-            [
-                'data' => ProductResource::collection($products),
-            ]
-        );
-    }
-
-    public function indexGeprek(Request $request) : JsonResponse
-    {
-
-        $products = Product::all()->where('type', 'geprek');
+        $query = Product::query();
 
         if ($request->has('search')) {
             $search = $request->query('search');
-            $products = $products->filter(function ($product) use ($search) {
-                return false !== stristr($product->name, $search);
-            });
+            $query->where('name', 'like', "%$search%");
         }
+
+        if ($request->has('category')) {
+            $type = $request->query('category');
+            $query->where('category', $type);
+        }
+
+        $products = $query->get();
 
         return response()->json(
             [
@@ -41,60 +34,79 @@ class ProductController extends Controller
         );
     }
 
-    public function indexRicebowl(Request $request) : JsonResponse
-    {
-        $products = Product::all()->where('type', 'ricebowl');
-
-
-        if ($request->has('search')) {
-            $search = $request->query('search');
-            $products = $products->filter(function ($product) use ($search) {
-                return false !== stristr($product->name, $search);
-            });
-        }
-
-        return response()->json(
-            [
-                'data' => ProductResource::collection($products),
-            ]
-        );
-    }
-
-    public function indexSnack(Request $request) : JsonResponse
-    {
-        $products = Product::all()->where('type', 'snack');
-
-        if ($request->has('search')) {
-            $search = $request->query('search');
-            $products = $products->filter(function ($product) use ($search) {
-                return false !== stristr($product->name, $search);
-            });
-        }
-
-        return response()->json(
-            [
-                'data' => ProductResource::collection($products),
-            ]
-        );
-    }
-
-    public function indexMinuman(Request $request) : JsonResponse
-    {
-        $products = Product::all()->where('type', 'minuman');
-
-        if ($request->has('search')) {
-            $search = $request->query('search');
-            $products = $products->filter(function ($product) use ($search) {
-                return false !== stristr($product->name, $search);
-            });
-        }
-
-        return response()->json(
-            [
-                'data' => ProductResource::collection($products),
-            ]
-        );
-    }
+//    public function indexGeprek(Request $request) : JsonResponse
+//    {
+//
+//        $products = Product::all()->where('type', 'geprek');
+//
+//        if ($request->has('search')) {
+//            $search = $request->query('search');
+//            $products = $products->filter(function ($product) use ($search) {
+//                return false !== stristr($product->name, $search);
+//            });
+//        }
+//
+//        return response()->json(
+//            [
+//                'data' => ProductResource::collection($products),
+//            ]
+//        );
+//    }
+//
+//    public function indexRicebowl(Request $request) : JsonResponse
+//    {
+//        $products = Product::all()->where('type', 'ricebowl');
+//
+//
+//        if ($request->has('search')) {
+//            $search = $request->query('search');
+//            $products = $products->filter(function ($product) use ($search) {
+//                return false !== stristr($product->name, $search);
+//            });
+//        }
+//
+//        return response()->json(
+//            [
+//                'data' => ProductResource::collection($products),
+//            ]
+//        );
+//    }
+//
+//    public function indexSnack(Request $request) : JsonResponse
+//    {
+//        $products = Product::all()->where('type', 'snack');
+//
+//        if ($request->has('search')) {
+//            $search = $request->query('search');
+//            $products = $products->filter(function ($product) use ($search) {
+//                return false !== stristr($product->name, $search);
+//            });
+//        }
+//
+//        return response()->json(
+//            [
+//                'data' => ProductResource::collection($products),
+//            ]
+//        );
+//    }
+//
+//    public function indexMinuman(Request $request) : JsonResponse
+//    {
+//        $products = Product::all()->where('type', 'minuman');
+//
+//        if ($request->has('search')) {
+//            $search = $request->query('search');
+//            $products = $products->filter(function ($product) use ($search) {
+//                return false !== stristr($product->name, $search);
+//            });
+//        }
+//
+//        return response()->json(
+//            [
+//                'data' => ProductResource::collection($products),
+//            ]
+//        );
+//    }
 
     public function indexTerlaris() : JsonResponse {
         $products = Product::all()->sortByDesc('total_rating')->take(8);

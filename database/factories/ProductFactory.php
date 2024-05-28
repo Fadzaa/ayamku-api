@@ -21,7 +21,7 @@ class ProductFactory extends Factory
             'name' => $this->faker->unique()->word,
             'description' => $this->faker->sentence,
             'price' => $this->faker->randomFloat(2, 1, 100),
-            'type' => $this->faker->randomElement(['geprek', 'ricebowl', 'snack', 'minuman']),
+            'category' => $this->faker->randomElement(['geprek', 'ricebowl', 'snack', 'minuman']),
             'stock' => $this->faker->numberBetween(0, 100),
             'image' => $this->faker->imageUrl(),
         ];
