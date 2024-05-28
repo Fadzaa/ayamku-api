@@ -16,7 +16,7 @@ class PostController extends Controller
         $posts = Post::all();
 
         return response()->json([
-            'data' => new PostResource($posts)
+            'data' => PostResource::collection($posts)
         ]);
     }
 

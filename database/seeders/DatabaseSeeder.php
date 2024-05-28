@@ -17,6 +17,8 @@ class DatabaseSeeder extends Seeder
             PromoSeeder::class,
             PostSeeder::class,
             VoucherSeeder::class,
+            CartSeeder::class,
+            CartItemSeeder::class,
         ]);
     }
 }

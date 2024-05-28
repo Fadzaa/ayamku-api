@@ -13,10 +13,10 @@ class VoucherController extends Controller
 {
     public function index() : JsonResponse
     {
-        $voucher = Voucher::all();
+        $vouchers = Voucher::all();
 
         return response()->json([
-            'data' => new VoucherResource($voucher)
+            'data' => VoucherResource::collection($vouchers)
         ]);
     }
 

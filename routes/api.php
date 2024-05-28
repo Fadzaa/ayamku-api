@@ -27,10 +27,6 @@ Route::middleware('auth:sanctum')->delete('/users/logout', [\App\Http\Controller
 
 Route::group(['prefix' => 'products'], function () {
     Route::get('/', [\App\Http\Controllers\ProductController::class , 'index']);
-    Route::get('/geprek', [\App\Http\Controllers\ProductController::class , 'indexGeprek']);
-    Route::get('/ricebowl', [\App\Http\Controllers\ProductController::class , 'indexRicebowl']);
-    Route::get('/snack', [\App\Http\Controllers\ProductController::class , 'indexSnack']);
-    Route::get('/minuman', [\App\Http\Controllers\ProductController::class , 'indexMinuman']);
     Route::get('/terlaris', [\App\Http\Controllers\ProductController::class , 'indexTerlaris']);
     Route::get('/{id}', [\App\Http\Controllers\ProductController::class , 'show']);
 
@@ -50,11 +46,20 @@ Route::group(['prefix' => 'promos'], function () {
 
 });
 
-Route::group(['prefix' => 'post'], function () {
+Route::group(['prefix' => 'posts'], function () {
     Route::get('/', [\App\Http\Controllers\PostController::class , 'index']);
     Route::post('/', [\App\Http\Controllers\PostController::class , 'store']);
     Route::put('/{id}', [\App\Http\Controllers\PostController::class , 'update']);
     Route::delete('/{id}', [\App\Http\Controllers\PostController::class , 'destroy']);
 });
+
+Route::group(['prefix' => 'vouchers'], function () {
+    Route::get('/', [\App\Http\Controllers\VoucherController::class , 'index']);
+    Route::post('/', [\App\Http\Controllers\VoucherController::class , 'store']);
+    Route::put('/{id}', [\App\Http\Controllers\VoucherController::class , 'update']);
+    Route::delete('/{id}', [\App\Http\Controllers\VoucherController::class , 'destroy']);
+});
+
+
 
 

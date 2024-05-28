@@ -22,7 +22,6 @@ class VoucherResource extends JsonResource
             'qty' => $this->qty,
             'start_date' => $this->start_date,
             'end_date' => $this->end_date,
-
         ];
     }
 }
