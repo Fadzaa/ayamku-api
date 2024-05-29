@@ -27,7 +27,7 @@ class ProductRequest extends FormRequest
             'price' => 'required|numeric',
             'type' => 'required|in:geprek,ricebowl,snack,minuman',
             'stock' => 'required|integer',
-            'image' => 'required|string',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ];
     }
 }
