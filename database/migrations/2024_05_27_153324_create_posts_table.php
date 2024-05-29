@@ -17,6 +17,7 @@ return new class extends Migration
             $table->text('description');
             $table->enum('major', ['Animasi 2D', 'Animasi 3D', 'PPLG', 'Teknik Grafika', 'Design Grafis'])->default('Animasi 2D');
             $table->enum('class', ['10', '11', '12'])->default('10');
+            $table->string('image');
             $table->timestamps();
         });
     }

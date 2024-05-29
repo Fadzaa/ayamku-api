@@ -97,6 +97,12 @@ class ProductController extends Controller
             ], 404);
         }
 
+        if ($request->hasFile('image')) {
+            Storage::delete('public/' . $product->image);
+            $image = $request->file('image')->storePublicly('products', 'public');
+            $data['image'] = Storage::url($image);
+        }
+
         $product->fill($data);
         $product->save();
 

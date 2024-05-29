@@ -26,7 +26,7 @@ class PromoUpdateRequest extends FormRequest
             'description' => 'string',
             'start_date' => 'date',
             'end_date' => 'date',
-            'image' => 'string',
+            'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ];
     }
 }

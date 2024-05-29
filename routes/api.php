@@ -18,21 +18,27 @@ use Illuminate\Support\Facades\Route;
 //    return $request->user();
 //});
 
-Route::post('/users', [\App\Http\Controllers\UserController::class , 'register']);
-Route::post('/users/login', [\App\Http\Controllers\UserController::class , 'login']);
+Route::group(['prefix' => 'users'], function () {
+    Route::post('/', [\App\Http\Controllers\UserController::class , 'register']);
+    Route::post('/login', [\App\Http\Controllers\UserController::class , 'login']);
 
-Route::middleware('auth:sanctum')->get('/users', [\App\Http\Controllers\UserController::class , 'currentUser']);
-Route::middleware('auth:sanctum')->post('/users', [\App\Http\Controllers\UserController::class , 'updateUser']);
-Route::middleware('auth:sanctum')->delete('/users/logout', [\App\Http\Controllers\UserController::class , 'logout']);
+    Route::group(['middleware' => 'auth:sanctum'], function () {
+        Route::get('/users', [\App\Http\Controllers\UserController::class , 'currentUser']);
+        Route::post('/users', [\App\Http\Controllers\UserController::class , 'updateUser']);
+        Route::delete('/users/logout', [\App\Http\Controllers\UserController::class , 'logout']);
+    });
+});
 
 Route::group(['prefix' => 'products'], function () {
     Route::get('/', [\App\Http\Controllers\ProductController::class , 'index']);
     Route::get('/terlaris', [\App\Http\Controllers\ProductController::class , 'indexTerlaris']);
     Route::get('/{id}', [\App\Http\Controllers\ProductController::class , 'show']);
 
-    Route::post('/', [\App\Http\Controllers\ProductController::class , 'store']);
-    Route::put('/{id}', [\App\Http\Controllers\ProductController::class , 'update']);
-    Route::delete('/{id}', [\App\Http\Controllers\ProductController::class , 'destroy']);
+    Route::group(['middleware' => 'admin'], function () {
+        Route::post('/', [\App\Http\Controllers\ProductController::class , 'store']);
+        Route::put('/{id}', [\App\Http\Controllers\ProductController::class , 'update']);
+        Route::delete('/{id}', [\App\Http\Controllers\ProductController::class , 'destroy']);
+    });
 
 });
 
@@ -40,24 +46,32 @@ Route::group(['prefix' => 'promos'], function () {
     Route::get('/', [\App\Http\Controllers\PromoController::class , 'index']);
     Route::get('/active', [\App\Http\Controllers\PromoController::class , 'indexActivePromo']);
 
-    Route::post('/', [\App\Http\Controllers\PromoController::class , 'store']);
-    Route::put('/{id}', [\App\Http\Controllers\PromoController::class , 'update']);
-    Route::delete('/{id}', [\App\Http\Controllers\PromoController::class , 'destroy']);
+    Route::group(['middleware' => 'admin'], function () {
+        Route::post('/', [\App\Http\Controllers\PromoController::class , 'store']);
+        Route::put('/{id}', [\App\Http\Controllers\PromoController::class , 'update']);
+        Route::delete('/{id}', [\App\Http\Controllers\PromoController::class , 'destroy']);
+    });
 
 });
 
 Route::group(['prefix' => 'posts'], function () {
     Route::get('/', [\App\Http\Controllers\PostController::class , 'index']);
-    Route::post('/', [\App\Http\Controllers\PostController::class , 'store']);
-    Route::put('/{id}', [\App\Http\Controllers\PostController::class , 'update']);
-    Route::delete('/{id}', [\App\Http\Controllers\PostController::class , 'destroy']);
+
+    Route::group(['middleware' => 'admin'], function () {
+        Route::post('/', [\App\Http\Controllers\PostController::class , 'store']);
+        Route::put('/{id}', [\App\Http\Controllers\PostController::class , 'update']);
+        Route::delete('/{id}', [\App\Http\Controllers\PostController::class , 'destroy']);
+    });
 });
 
 Route::group(['prefix' => 'vouchers'], function () {
     Route::get('/', [\App\Http\Controllers\VoucherController::class , 'index']);
-    Route::post('/', [\App\Http\Controllers\VoucherController::class , 'store']);
-    Route::put('/{id}', [\App\Http\Controllers\VoucherController::class , 'update']);
-    Route::delete('/{id}', [\App\Http\Controllers\VoucherController::class , 'destroy']);
+
+    Route::group(['middleware' => 'admin'], function () {
+        Route::post('/', [\App\Http\Controllers\VoucherController::class , 'store']);
+        Route::put('/{id}', [\App\Http\Controllers\VoucherController::class , 'update']);
+        Route::delete('/{id}', [\App\Http\Controllers\VoucherController::class , 'destroy']);
+    });
 });
 
 

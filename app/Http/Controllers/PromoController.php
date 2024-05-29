@@ -8,6 +8,7 @@ use App\Http\Resources\PromoResource;
 use App\Models\Promo;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class PromoController extends Controller
 {
@@ -42,6 +43,12 @@ class PromoController extends Controller
         $data = $request->validated();
 
         $promo = new Promo();
+
+        if ($request->hasFile('image')) {
+            $image = $request->file('image')->storePublicly('promos', 'public');
+            $promo->image = Storage::url($image);
+        }
+
         $promo->fill($data);
         $promo->save();
 
@@ -59,6 +66,13 @@ class PromoController extends Controller
         $data = $request->validated();
 
         $promo = Promo::all()->find($id);
+
+        if ($request->hasFile('image')) {
+            $promo->image = Storage::delete('public/' . $promo->image);
+            $image = $request->file('image')->storePublicly('promos', 'public');
+            $promo->image = Storage::url($image);
+        }
+
         $promo->fill($data);
         $promo->save();
 
