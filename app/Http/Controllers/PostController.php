@@ -8,6 +8,7 @@ use App\Http\Resources\PostResource;
 use App\Models\Post;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -25,7 +26,14 @@ class PostController extends Controller
         $data = $request->validated();
 
         $post = new Post();
+
+        if ($request->hasFile('image')) {
+            $image = $request->file('image')->storePublicly('posts', 'public');
+            $data['image'] = Storage::url($image);
+        }
+
         $post->fill($data);
+
         $post->save();
 
         return response()->json([
@@ -39,6 +47,13 @@ class PostController extends Controller
         $data = $request->validated();
 
         $post = Post::all()->find($id);
+
+        if ($request->hasFile('image')) {
+            Storage::delete('public/' . $post->image);
+            $image = $request->file('image')->storePublicly('posts', 'public');
+            $data['image'] = Storage::url($image);
+        }
+
         $post->fill($data);
         $post->save();
 

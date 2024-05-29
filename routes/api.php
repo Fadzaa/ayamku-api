@@ -18,12 +18,16 @@ use Illuminate\Support\Facades\Route;
 //    return $request->user();
 //});
 
-Route::post('/users', [\App\Http\Controllers\UserController::class , 'register']);
-Route::post('/users/login', [\App\Http\Controllers\UserController::class , 'login']);
+Route::group(['prefix' => 'users'], function () {
+    Route::post('/', [\App\Http\Controllers\UserController::class , 'register']);
+    Route::post('/login', [\App\Http\Controllers\UserController::class , 'login']);
 
-Route::middleware('auth:sanctum')->get('/users', [\App\Http\Controllers\UserController::class , 'currentUser']);
-Route::middleware('auth:sanctum')->post('/users', [\App\Http\Controllers\UserController::class , 'updateUser']);
-Route::middleware('auth:sanctum')->delete('/users/logout', [\App\Http\Controllers\UserController::class , 'logout']);
+    Route::group(['middleware' => 'auth:sanctum'], function () {
+        Route::get('/users', [\App\Http\Controllers\UserController::class , 'currentUser']);
+        Route::post('/users', [\App\Http\Controllers\UserController::class , 'updateUser']);
+        Route::delete('/users/logout', [\App\Http\Controllers\UserController::class , 'logout']);
+    });
+});
 
 Route::group(['prefix' => 'products'], function () {
     Route::get('/', [\App\Http\Controllers\ProductController::class , 'index']);

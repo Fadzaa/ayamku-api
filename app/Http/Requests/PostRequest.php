@@ -25,6 +25,7 @@ class PostRequest extends FormRequest
             'name' => 'required|string',
             'major' => 'required|string|in:Animasi 2D,Animasi 3D,PPLG,Teknik Grafika,Design Grafis',
             'class' => 'required|string|in:10,11,12',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ];
     }
 }
