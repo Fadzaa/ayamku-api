@@ -18,8 +18,8 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->integer('discount')->default(0);
             $table->integer('qty')->default(0);
-            $table->integer('start_date')->default(0);
-            $table->integer('end_date')->default(0);
+            $table->date('start_date');
+            $table->date('end_date');
             $table->timestamps();
         });
     }

@@ -22,8 +22,10 @@ class VoucherFactory extends Factory
             'description' => $this->faker->text,
             'discount' => $this->faker->randomNumber(),
             'qty' => $this->faker->randomNumber(),
-            'start_date' => $this->faker->randomNumber(),
-            'end_date' => $this->faker->randomNumber(),
+            //faker start_date with random date
+            'start_date' => $this->faker->date(),
+            'end_date' => $this->faker->date()
+
         ];
     }
 }
