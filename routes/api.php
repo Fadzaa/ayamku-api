@@ -74,6 +74,19 @@ Route::group(['prefix' => 'vouchers'], function () {
 //    });
 });
 
+Route::group(['prefix' => 'carts'], function () {
+    Route::get('/{userId}', [\App\Http\Controllers\CartController::class , 'showCartByUser']);
+
+    Route::group(['middleware' => 'auth:sanctum'], function () {
+        Route::post('/', [\App\Http\Controllers\CartController::class , 'storeCart']);
+    });
+
+//    Route::group(['middleware' => 'admin'], function () {
+
+//    });
+});
+
+
 
 
 
