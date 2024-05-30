@@ -27,8 +27,8 @@ class VoucherUpdateRequest extends FormRequest
             'description' => 'nullable|string',
             'discount' => 'integer|min:0',
             'qty' => 'integer|min:0',
-            'start_date' => 'integer|min:0',
-            'end_date' => 'integer|min:0',
+            'start_date' => 'date|min:0',
+            'end_date' => 'date|min:0',
         ];
     }
 }
