@@ -25,7 +25,7 @@ class ProductRequest extends FormRequest
             'name' => 'required|string|unique:products',
             'description' => 'required|string',
             'price' => 'required|numeric',
-            'type' => 'required|in:geprek,ricebowl,snack,minuman',
+            'category' => 'required|in:geprek,ricebowl,snack,minuman',
             'stock' => 'required|integer',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ];

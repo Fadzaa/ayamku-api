@@ -19,8 +19,9 @@ class PostFactory extends Factory
         return [
             'name' => $this->faker->unique()->sentence,
             'description' => $this->faker->paragraph,
-            'major' => $this->faker->randomElement(['Animasi 2D', 'Animasi 3D', 'PPLG', 'Teknik Grafika', 'Design Grafis']),
-            'class' => $this->faker->randomElement(['10', '11', '12']),
+            'image' => $this->faker->imageUrl()
+//            'major' => $this->faker->randomElement(['Animasi 2D', 'Animasi 3D', 'PPLG', 'Teknik Grafika', 'Design Grafis']),
+//            'class' => $this->faker->randomElement(['10', '11', '12']),
         ];
     }
 }

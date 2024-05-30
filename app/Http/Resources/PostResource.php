@@ -17,8 +17,8 @@ class PostResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'major' => $this->major,
-            'class' => $this->class,
+            'description' => $this->description,
+            'image'=>$this->image
         ];
     }
 }
