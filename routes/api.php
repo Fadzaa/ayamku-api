@@ -86,6 +86,16 @@ Route::group(['prefix' => 'carts'], function () {
 //    });
 });
 
+Route::group(['prefix' => 'orders'], function () {
+    Route::get('/', [\App\Http\Controllers\OrderController::class , 'index']);
+    Route::post('/', [\App\Http\Controllers\OrderController::class , 'store']);
+
+
+//    Route::group(['middleware' => 'admin'], function () {
+
+//    });
+});
+
 
 
 
