@@ -25,7 +25,7 @@ class ProductUpdateRequest extends FormRequest
             'name' => 'string',
             'description' => 'string',
             'price' => 'numeric',
-            'type' => 'in:geprek,ricebowl,snack,minuman',
+            'category' => 'in:geprek,ricebowl,snack,minuman',
             'stock' => 'integer',
             'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ];
