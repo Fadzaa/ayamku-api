@@ -96,6 +96,8 @@ Route::group(['prefix' => 'orders'], function () {
 //    });
 });
 
+Route::post('/payments', [\App\Http\Controllers\PaymentController::class , 'create']);
+
 
 
 
