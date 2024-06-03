@@ -105,7 +105,7 @@ Route::group(['prefix' => 'favourite-foods', 'middleware' => 'auth:sanctum'], fu
     Route::delete('/{productId}', [\App\Http\Controllers\FavouriteFoodController::class , 'destroy']);
 });
 
-
-
-
-
+Route::group(['prefix' => 'store-status'], function () {
+    Route::get('/', [\App\Http\Controllers\StoreStatusController::class , 'getStoreStatus']);
+    Route::put('/', [\App\Http\Controllers\StoreStatusController::class , 'updateStoreStatus']);
+});

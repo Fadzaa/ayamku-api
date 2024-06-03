@@ -20,7 +20,8 @@ class DatabaseSeeder extends Seeder
             CartSeeder::class,
             CartItemSeeder::class,
             AdminUserSeeder::class,
-            FavouriteFoodSeeder::class
+            FavouriteFoodSeeder::class,
+            StoreStatusSeeder::class,
         ]);
     }
 }
