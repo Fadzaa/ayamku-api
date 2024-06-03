@@ -19,7 +19,7 @@ class PostFactory extends Factory
         return [
             'name' => $this->faker->unique()->sentence,
             'description' => $this->faker->paragraph,
-            'image' => $this->faker->imageUrl()
+            'image' => 'https://smkrus.sch.id/wp-content/uploads/2020/09/05_1203x800.jpg'
 //            'major' => $this->faker->randomElement(['Animasi 2D', 'Animasi 3D', 'PPLG', 'Teknik Grafika', 'Design Grafis']),
 //            'class' => $this->faker->randomElement(['10', '11', '12']),
         ];

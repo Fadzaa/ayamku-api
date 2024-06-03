@@ -18,8 +18,6 @@ class UserController extends Controller
     {
         $data = $request->validated();
 
-
-
         $user = new User($data);
         $user->password = Hash::make($data['password']);
 
@@ -27,7 +25,8 @@ class UserController extends Controller
 
         return response()->json([
             'message' => 'User created successfully',
-            'data' => new UserResource($user)
+            'data' => new UserResource($user),
+            'token' => $user->createToken('auth_token')->plainTextToken
         ], 201);
 
     }
