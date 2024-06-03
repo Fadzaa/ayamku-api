@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ChangePasswordRequest;
 use App\Http\Requests\UserRequest\LoginRequest;
 use App\Http\Requests\UserRequest\RegisterRequest;
 use App\Http\Requests\UserRequest\UpdateUserRequest;
@@ -91,6 +92,27 @@ class UserController extends Controller
 
         return response()->json([
             'message' => 'Logout successful'
+        ], 200);
+    }
+
+    public function updatePassword(ChangePasswordRequest $request) : JsonResponse
+    {
+        $data = $request->validated();
+
+        $user = User::all()->where('id', Auth::id())->first();
+
+        if (!Hash::check($data['old_password'], $user->password)) {
+            return response()->json([
+                'message' => 'Old password is incorrect'
+            ], 400);
+        }
+
+        $user->password = Hash::make($data['new_password']);
+
+        $user->save();
+
+        return response()->json([
+            'message' => 'Password updated successfully'
         ], 200);
     }
 }

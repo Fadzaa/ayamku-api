@@ -26,6 +26,7 @@ Route::group(['prefix' => 'users'], function () {
         Route::get('/', [\App\Http\Controllers\UserController::class , 'currentUser']);
         Route::put('/', [\App\Http\Controllers\UserController::class , 'updateUser']);
         Route::delete('/logout', [\App\Http\Controllers\UserController::class , 'logout']);
+        Route::put('/update-password', [\App\Http\Controllers\UserController::class , 'updatePassword']);
     });
 });
 
