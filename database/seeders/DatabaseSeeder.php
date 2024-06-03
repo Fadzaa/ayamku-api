@@ -19,7 +19,8 @@ class DatabaseSeeder extends Seeder
             VoucherSeeder::class,
             CartSeeder::class,
             CartItemSeeder::class,
-            AdminUserSeeder::class
+            AdminUserSeeder::class,
+            FavouriteFoodSeeder::class
         ]);
     }
 }

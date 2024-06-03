@@ -98,6 +98,12 @@ Route::group(['prefix' => 'orders'], function () {
 
 Route::post('/payments', [\App\Http\Controllers\PaymentController::class , 'create']);
 
+Route::group(['prefix' => 'favourite-foods', 'middleware' => 'auth:sanctum'], function () {
+    Route::get('/', [\App\Http\Controllers\FavouriteFoodController::class , 'index']);
+    Route::post('/', [\App\Http\Controllers\FavouriteFoodController::class , 'store']);
+    Route::delete('/{productId}', [\App\Http\Controllers\FavouriteFoodController::class , 'destroy']);
+});
+
 
 
 
