@@ -67,12 +67,17 @@ Route::group(['prefix' => 'posts'], function () {
 
 Route::group(['prefix' => 'vouchers'], function () {
     Route::get('/', [\App\Http\Controllers\VoucherController::class , 'index']);
+    Route::get('/show', [\App\Http\Controllers\VoucherController::class , 'currentUserVoucher']);
 
 //    Route::group(['middleware' => 'admin'], function () {
         Route::post('/', [\App\Http\Controllers\VoucherController::class , 'store']);
         Route::put('/{id}', [\App\Http\Controllers\VoucherController::class , 'update']);
         Route::delete('/{id}', [\App\Http\Controllers\VoucherController::class , 'destroy']);
 //    });
+
+    Route::group(['middleware' => 'auth:sanctum'], function () {
+        Route::post('/give', [\App\Http\Controllers\VoucherController::class , 'giveVoucher']);
+    });
 });
 
 Route::group(['prefix' => 'carts'], function () {
