@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\User;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -20,6 +21,8 @@ class AdminMiddleware
             return $next($request);
         }
 
-        return response()->json(['error' => 'You have not admin access'], 403);
+        return response()->json([
+            'error' => 'You do not have admin access',
+            ], 403);
     }
 }

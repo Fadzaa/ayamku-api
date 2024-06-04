@@ -35,11 +35,11 @@ Route::group(['prefix' => 'products'], function () {
     Route::get('/terlaris', [\App\Http\Controllers\ProductController::class , 'indexTerlaris']);
     Route::get('/{id}', [\App\Http\Controllers\ProductController::class , 'show']);
 
-//    Route::group(['middleware' => 'admin'], function () {
+    Route::group(['middleware' => ['auth:sanctum', 'admin']], function () {
         Route::post('/', [\App\Http\Controllers\ProductController::class , 'store']);
         Route::put('/{id}', [\App\Http\Controllers\ProductController::class , 'update']);
         Route::delete('/{id}', [\App\Http\Controllers\ProductController::class , 'destroy']);
-//    });
+    });
 
 });
 
@@ -47,22 +47,22 @@ Route::group(['prefix' => 'promos'], function () {
     Route::get('/', [\App\Http\Controllers\PromoController::class , 'index']);
     Route::get('/active', [\App\Http\Controllers\PromoController::class , 'indexActivePromo']);
 
-//    Route::group(['middleware' => 'admin'], function () {
+    Route::group(['middleware' => 'admin'], function () {
         Route::post('/', [\App\Http\Controllers\PromoController::class , 'store']);
         Route::put('/{id}', [\App\Http\Controllers\PromoController::class , 'update']);
         Route::delete('/{id}', [\App\Http\Controllers\PromoController::class , 'destroy']);
-//    });
+    });
 
 });
 
 Route::group(['prefix' => 'posts'], function () {
     Route::get('/', [\App\Http\Controllers\PostController::class , 'index']);
 
-//    Route::group(['middleware' => 'admin'], function () {
+    Route::group(['middleware' => 'admin'], function () {
         Route::post('/', [\App\Http\Controllers\PostController::class , 'store']);
         Route::put('/{id}', [\App\Http\Controllers\PostController::class , 'update']);
         Route::delete('/{id}', [\App\Http\Controllers\PostController::class , 'destroy']);
-//    });
+    });
 });
 
 Route::group(['prefix' => 'vouchers'], function () {
@@ -71,11 +71,11 @@ Route::group(['prefix' => 'vouchers'], function () {
     Route::post('/give', [\App\Http\Controllers\VoucherController::class , 'giveVoucher']);
     Route::post('/redeem', [\App\Http\Controllers\VoucherController::class , 'redeemVoucher'])->middleware('auth:sanctum');
 
-//    Route::group(['middleware' => 'admin'], function () {
+    Route::group(['middleware' => 'admin'], function () {
         Route::post('/', [\App\Http\Controllers\VoucherController::class , 'store']);
         Route::put('/{id}', [\App\Http\Controllers\VoucherController::class , 'update']);
         Route::delete('/{id}', [\App\Http\Controllers\VoucherController::class , 'destroy']);
-//    });
+    });
 
     Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::post('/give', [\App\Http\Controllers\VoucherController::class , 'giveVoucher']);
@@ -90,9 +90,6 @@ Route::group(['prefix' => 'carts'], function () {
         Route::delete('/{cartItemId}', [\App\Http\Controllers\CartController::class , 'deleteCartItem']);
     });
 
-//    Route::group(['middleware' => 'admin'], function () {
-
-//    });
 });
 
 Route::group(['prefix' => 'orders'], function () {
@@ -100,10 +97,6 @@ Route::group(['prefix' => 'orders'], function () {
     Route::get('/show', [\App\Http\Controllers\OrderController::class , 'show'])->middleware('auth:sanctum');
     Route::post('/', [\App\Http\Controllers\OrderController::class , 'store'])->middleware('auth:sanctum');
 
-
-//    Route::group(['middleware' => 'admin'], function () {
-
-//    });
 });
 
 Route::post('/payments', [\App\Http\Controllers\PaymentController::class , 'create']);
