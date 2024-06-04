@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('voucher_id')->constrained()->cascadeOnDelete();
             $table->boolean('used')->default(false);
+            $table->boolean('is_redeemed')->default(false);
             $table->timestamps();
         });
     }

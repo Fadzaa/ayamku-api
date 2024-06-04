@@ -86,4 +86,45 @@ class VoucherController extends Controller
         ]);
 
     }
+
+    public function redeemVoucher(Request $request) : JsonResponse
+    {
+        $request->validate([
+            'voucher_code' => 'required'
+        ]);
+
+        $voucherCode = $request->input('voucher_code');
+
+        if (!Voucher::all()->where('code', $voucherCode)->first()) {
+            return response()->json([
+                'message' => 'Voucher not found'
+            ], 404);
+        }
+
+        $voucherId = Voucher::all()->where('code', $voucherCode)->first()->id;
+
+        $userId = Auth::id();
+
+        $isVoucherExist = UserVoucher::all()->where('voucher_id', $voucherId)
+            ->where('user_id', $userId)
+            ->where('is_redeemed', true)
+            ->first();
+
+        if (!$isVoucherExist) {
+            $redeemVoucher = new UserVoucher();
+            $redeemVoucher->user_id = $userId;
+            $redeemVoucher->voucher_id = $voucherId;
+            $redeemVoucher->is_redeemed = true;
+            $redeemVoucher->save();
+
+            return response()->json([
+                'message' => 'Voucher redeemed successfully',
+                'data' => $redeemVoucher
+            ]);
+        } else {
+            return response()->json([
+                'message' => 'Voucher not found or already redeemed',
+            ], 404);
+        }
+    }
 }
