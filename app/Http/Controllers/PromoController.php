@@ -46,7 +46,7 @@ class PromoController extends Controller
 
         if ($request->hasFile('image')) {
             $image = $request->file('image')->storePublicly('promos', 'public');
-            $promo->image = Storage::url($image);
+            $data['image'] = Storage::url($image);
         }
 
         $promo->fill($data);
@@ -70,7 +70,7 @@ class PromoController extends Controller
         if ($request->hasFile('image')) {
             $promo->image = Storage::delete('public/' . $promo->image);
             $image = $request->file('image')->storePublicly('promos', 'public');
-            $promo->image = Storage::url($image);
+            $data['image'] = Storage::url($image);
         }
 
         $promo->fill($data);
