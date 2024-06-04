@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             AdminUserSeeder::class,
             FavouriteFoodSeeder::class,
             StoreStatusSeeder::class,
+            OrderSeeder::class
         ]);
     }
 }
