@@ -24,6 +24,7 @@ class PromoRequest extends FormRequest
         return [
             'name' => 'required|string',
             'description' => 'required|string',
+            'discount' => 'required|numeric',
             'start_date' => 'required|date',
             'end_date' => 'required|date',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
