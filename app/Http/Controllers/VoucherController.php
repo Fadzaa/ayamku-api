@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\GiveVoucherRequest;
 use App\Http\Requests\VoucherRequest;
 use App\Http\Requests\VoucherUpdateRequest;
 use App\Http\Resources\VoucherResource;
+use App\Models\UserVoucher;
 use App\Models\Voucher;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class VoucherController extends Controller
 {
@@ -56,5 +59,31 @@ class VoucherController extends Controller
         return response()->json([
             'message' => 'Voucher deleted successfully'
         ]);
+    }
+
+    public function currentUserVoucher() : JsonResponse
+    {
+        $userId = Auth::id();
+        $vouchers = Voucher::all()->where('user_id', $userId);
+
+        return response()->json([
+            'data' => VoucherResource::collection($vouchers)
+        ]);
+    }
+
+    public function giveVoucher(GiveVoucherRequest $request) : JsonResponse
+    {
+
+        $data = $request->validated();
+
+        $userVoucher = new UserVoucher();
+        $userVoucher->fill($data);
+
+        $userVoucher->save();
+
+        return response()->json([
+            'message' => 'Voucher given successfully'
+        ]);
+
     }
 }
