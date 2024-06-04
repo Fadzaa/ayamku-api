@@ -109,3 +109,9 @@ Route::group(['prefix' => 'store-status'], function () {
     Route::get('/', [\App\Http\Controllers\StoreStatusController::class , 'getStoreStatus']);
     Route::put('/', [\App\Http\Controllers\StoreStatusController::class , 'updateStoreStatus']);
 });
+
+
+Route::group(['prefix' => 'order-histories'], function () {
+    Route::get('/', [\App\Http\Controllers\OrderHistoryController::class , 'index']);
+    Route::get('/show', [\App\Http\Controllers\OrderHistoryController::class , 'show'])->middleware('auth:sanctum');
+});

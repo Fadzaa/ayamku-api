@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('cart_id')->constrained()->cascadeOnDelete();
             $table->enum('method_type', ['on_delivery', 'pickup'])->default('on_delivery');
             $table->foreignId('posts_id')->constrained()->cascadeOnDelete();
-            $table->string('status');
+            $table->enum('status', ['accept', 'processing', 'completed', 'cancelled'])->default('accept');
             $table->timestamps();
         });
     }
