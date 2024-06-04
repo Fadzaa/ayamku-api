@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ChangePasswordRequest;
+use App\Http\Requests\UserRequest\ChangePasswordRequest;
 use App\Http\Requests\UserRequest\LoginRequest;
 use App\Http\Requests\UserRequest\RegisterRequest;
 use App\Http\Requests\UserRequest\UpdateUserRequest;

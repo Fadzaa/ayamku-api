@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\FavouriteFoodRequest;
+use App\Http\Resources\FavouriteFoodResource;
 use App\Models\FavouriteFood;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -24,7 +25,7 @@ class FavouriteFoodController extends Controller
 
         return response()->json([
             'message' => 'success',
-            'data' => $favouriteFoods
+            'data' => FavouriteFoodResource::collection($favouriteFoods)
         ]);
     }
 
@@ -46,7 +47,7 @@ class FavouriteFoodController extends Controller
 
         return response()->json([
             'message' => 'success',
-            'data' => $favouriteFood
+            'data' => new FavouriteFoodResource($favouriteFood)
         ]);
     }
 
