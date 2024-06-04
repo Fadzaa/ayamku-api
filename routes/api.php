@@ -81,10 +81,11 @@ Route::group(['prefix' => 'vouchers'], function () {
 });
 
 Route::group(['prefix' => 'carts'], function () {
-    Route::get('/{userId}', [\App\Http\Controllers\CartController::class , 'showCartByUser']);
+    Route::get('/', [\App\Http\Controllers\CartController::class , 'showCartByUser'])->middleware('auth:sanctum');
 
     Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::post('/', [\App\Http\Controllers\CartController::class , 'storeCart']);
+        Route::delete('/{cartItemId}', [\App\Http\Controllers\CartController::class , 'deleteCartItem']);
     });
 
 //    Route::group(['middleware' => 'admin'], function () {
