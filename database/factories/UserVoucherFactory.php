@@ -20,6 +20,7 @@ class UserVoucherFactory extends Factory
             'voucher_id' => $this->faker->randomElement(\App\Models\Voucher::all()->pluck('id')->toArray()),
             'user_id' => $this->faker->randomElement(\App\Models\User::all()->pluck('id')->toArray()),
             'status' => $this->faker->randomElement(['active', 'used', 'expired']),
+            'is_redeemed' => $this->faker->boolean(),
         ];
     }
 }

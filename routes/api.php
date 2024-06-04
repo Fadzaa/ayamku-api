@@ -68,6 +68,8 @@ Route::group(['prefix' => 'posts'], function () {
 Route::group(['prefix' => 'vouchers'], function () {
     Route::get('/', [\App\Http\Controllers\VoucherController::class , 'index']);
     Route::get('/show', [\App\Http\Controllers\VoucherController::class , 'currentUserVoucher']);
+    Route::post('/give', [\App\Http\Controllers\VoucherController::class , 'giveVoucher']);
+    Route::post('/redeem', [\App\Http\Controllers\VoucherController::class , 'redeemVoucher'])->middleware('auth:sanctum');
 
 //    Route::group(['middleware' => 'admin'], function () {
         Route::post('/', [\App\Http\Controllers\VoucherController::class , 'store']);
