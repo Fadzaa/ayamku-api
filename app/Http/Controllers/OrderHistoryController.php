@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\OrderResource;
 use App\Models\Order;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -16,7 +17,9 @@ class OrderHistoryController extends Controller
             $ordersHistory = $ordersHistory->where('method_type', $request->method_type)->sortByDesc('created_at');
         }
 
-        return response()->json($ordersHistory);
+        return response()->json([
+            'data' => OrderResource::collection($ordersHistory)
+        ]);
     }
 
     public function show(Request $request) : JsonResponse {
@@ -45,6 +48,10 @@ class OrderHistoryController extends Controller
             $order = [];
         }
 
-        return response()->json($order);
+        return response()->json(
+            [
+                'data' => OrderResource::collection($order),
+            ]
+        );
     }
 }

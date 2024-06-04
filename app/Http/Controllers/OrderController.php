@@ -12,7 +12,7 @@ class OrderController extends Controller
 {
     public function index() :JsonResponse
     {
-        $orders = Order::all()->load(['user', 'cart.cartItems', 'post']);
+        $orders = Order::all();
 
         return response()->json(
             [
@@ -25,7 +25,7 @@ class OrderController extends Controller
     {
         $userId = Auth::id();
 
-        $orders = Order::all()->where('user_id', $userId)->load(['user', 'cart.cartItems', 'post'])->first();
+        $orders = Order::all()->where('user_id', $userId)->first();
 
         return response()->json(
             [
