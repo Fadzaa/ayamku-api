@@ -3,20 +3,33 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\OrderRequest;
-use App\Models\Cart;
+use App\Http\Resources\OrderResource;
 use App\Models\Order;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
     public function index() :JsonResponse
     {
-        $orders = Order::all();
+        $orders = Order::all()->load(['user', 'cart.cartItems', 'post']);
 
         return response()->json(
             [
-                'data' => $orders,
+                'data' => OrderResource::collection($orders),
+            ]
+        );
+    }
+
+    public function show() : JsonResponse
+    {
+        $userId = Auth::id();
+
+        $orders = Order::all()->where('user_id', $userId)->load(['user', 'cart.cartItems', 'post'])->first();
+
+        return response()->json(
+            [
+                'data' => new OrderResource($orders),
             ]
         );
     }
@@ -25,10 +38,11 @@ class OrderController extends Controller
     {
         $data = $request->validated();
 
-        $data['user_id'] = Cart::all()->where('id', $data['cart_id'])->first()->user_id;
+        $userId = Auth::id();
+
+        $data['user_id'] = $userId;
 
         $order = new Order();
-
         $order->fill($data);
         $order->save();
 

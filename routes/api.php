@@ -97,7 +97,8 @@ Route::group(['prefix' => 'carts'], function () {
 
 Route::group(['prefix' => 'orders'], function () {
     Route::get('/', [\App\Http\Controllers\OrderController::class , 'index']);
-    Route::post('/', [\App\Http\Controllers\OrderController::class , 'store']);
+    Route::get('/show', [\App\Http\Controllers\OrderController::class , 'show'])->middleware('auth:sanctum');
+    Route::post('/', [\App\Http\Controllers\OrderController::class , 'store'])->middleware('auth:sanctum');
 
 
 //    Route::group(['middleware' => 'admin'], function () {
