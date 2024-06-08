@@ -6,7 +6,7 @@
         <p style="font-size:1.1em">Halo,</p>
         <p>Use the following OTP to complete your Sign Up procedures. OTP is valid for 5 minutes</p>
         <h2 style="background: #00466a;margin: 0 auto;width: max-content;padding: 0 10px;color: #fff;border-radius: 4px;">{{ $otp }}</h2>
-        <p style="font-size:0.9em;">Regards,<br />Limatrack</p>
+        <p style="font-size:0.9em;">Regards,<br />AyamKu</p>
         <hr style="border:none;border-top:1px solid #eee" />
         <div style="float:right;padding:8px 0;color:#aaa;font-size:0.8em;line-height:1;font-weight:300">
         </div>
