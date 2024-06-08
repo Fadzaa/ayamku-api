@@ -21,6 +21,8 @@ use Illuminate\Support\Facades\Route;
 Route::group(['prefix' => 'users'], function () {
     Route::post('/', [\App\Http\Controllers\UserController::class , 'register']);
     Route::post('/login', [\App\Http\Controllers\UserController::class , 'login']);
+    Route::post('/otp', [\App\Http\Controllers\OtpController::class , 'sendOtp']);
+
 
     Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::get('/', [\App\Http\Controllers\UserController::class , 'currentUser']);
