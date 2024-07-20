@@ -24,7 +24,8 @@ class FavouriteFoodController extends Controller
         $favouriteFoods = FavouriteFood::all()->where('user_id', $user->id);
 
         return response()->json([
-            'message' => 'success',
+            'status' => 'success',
+            'user' => $user->name,
             'data' => FavouriteFoodResource::collection($favouriteFoods)
         ]);
     }
@@ -40,14 +41,20 @@ class FavouriteFoodController extends Controller
             ], 401);
         }
 
+        if (FavouriteFood::all()->where('product_id', $data['product_id'])->where('user_id', $user->id)->first()) {
+            return response()->json([
+                'message' => 'Favourite food already exists.'
+            ], 400);
+        }
+
         $favouriteFood = new FavouriteFood();
         $favouriteFood->user_id = $user->id;
         $favouriteFood->product_id = $data['product_id'];
         $favouriteFood->save();
 
         return response()->json([
-            'message' => 'success',
-            'data' => new FavouriteFoodResource($favouriteFood)
+            'status' => 'success',
+            'message' => 'Storing favourite food success'
         ]);
     }
 
@@ -79,7 +86,8 @@ class FavouriteFoodController extends Controller
         $favouriteFood->delete();
 
         return response()->json([
-            'message' => 'Delete Favourite Food Successfully'
+            'status' => 'success',
+            'message' => 'Delete favourite food success'
         ]);
     }
 }

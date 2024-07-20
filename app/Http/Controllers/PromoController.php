@@ -67,6 +67,12 @@ class PromoController extends Controller
 
         $promo = Promo::all()->find($id);
 
+        if ($promo === null) {
+            return response()->json([
+                'message' => 'Promo not found',
+            ], 404);
+        }
+
         if ($request->hasFile('image')) {
             $promo->image = Storage::delete('public/' . $promo->image);
             $image = $request->file('image')->storePublicly('promos', 'public');
@@ -87,6 +93,13 @@ class PromoController extends Controller
     public function destroy($id) : JsonResponse
     {
         $promo = Promo::all()->find($id);
+
+        if ($promo === null) {
+            return response()->json([
+                'message' => 'Promo not found',
+            ], 404);
+        }
+
         $promo->delete();
 
         return response()->json(

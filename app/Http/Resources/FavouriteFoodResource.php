@@ -16,7 +16,6 @@ class FavouriteFoodResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'user' => new UserResource($this->user),
             'product' => new ProductResource($this->product),
         ];
     }
