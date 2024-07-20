@@ -31,7 +31,9 @@ class OtpController extends Controller
         $otp->save();
 
         return response([
+            'status' => 'success',
             'message' => 'Otp has been sent to your email',
+            'otp' => $otpNumber,
         ], 200);
     }
 }

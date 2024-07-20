@@ -54,4 +54,23 @@ class OrderController extends Controller
             201
         );
     }
+
+    public function orderSummary() : JsonResponse
+    {
+        $orders = Order::all()->where('timestamps', now());
+
+        $totalOrder = $orders->count();
+        $totalOrderCanceled = $orders->where('status', 'canceled')->count();
+        $totalOrderDelivery = $orders->where('method_type', 'delivery')->count();
+        $totalOrderPickup = $orders->where('method_type', 'pickup')->count();
+
+        return response()->json(
+            [
+                'total_order' => $totalOrder,
+                'total_order_canceled' => $totalOrderCanceled,
+                'total_order_delivery' => $totalOrderDelivery,
+                'total_order_pickup' => $totalOrderPickup,
+            ]
+        );
+    }
 }
