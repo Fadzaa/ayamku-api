@@ -27,4 +27,15 @@ class StoreStatusController extends Controller
 
         return response()->json(['message' => 'Store status updated successfully']);
     }
+
+    public function updateStockProduct(Request $request)
+    {
+        $status = StoreStatus::all()->first();
+        $status->stock_product = $request->stock_product;
+        $status->save();
+
+        return response()->json(['message' => 'Stock product updated successfully']);
+    }
+
+
 }

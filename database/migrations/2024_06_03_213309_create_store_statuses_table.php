@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('store_statuses', function (Blueprint $table) {
             $table->id();
             $table->boolean('is_open')->default(false);
+            $table->integer('stock_product')->default(0);
             $table->timestamps();
         });
     }
