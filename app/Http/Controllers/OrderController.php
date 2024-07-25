@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\OrderRequest;
+use App\Http\Requests\OrderStatusChangeRequest;
 use App\Http\Resources\OrderResource;
 use App\Models\Order;
 use Illuminate\Http\JsonResponse;
@@ -53,6 +54,9 @@ class OrderController extends Controller
 
         $order = new Order();
         $order->fill($data);
+
+        $order->status = 'processing';
+
         $order->save();
 
         return response()->json(
@@ -61,6 +65,33 @@ class OrderController extends Controller
                 'data' => $order,
             ],
             201
+        );
+    }
+
+    public function updateStatus(OrderStatusChangeRequest $request) : JsonResponse
+    {
+        $data = $request->validated();
+
+        $order = Order::all()->where('id', $data['order_id'])->first();
+
+        if (!$order) {
+            return response()->json(
+                [
+                    'message' => 'Order not found',
+                ],
+                404
+            );
+        }
+
+        $order->status = $data['status'];
+
+        $order->save();
+
+        return response()->json(
+            [
+                'message' => 'Order status updated successfully',
+                'data' => $order,
+            ]
         );
     }
 
@@ -82,4 +113,6 @@ class OrderController extends Controller
             ]
         );
     }
+
+
 }
