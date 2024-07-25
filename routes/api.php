@@ -98,6 +98,7 @@ Route::group(['prefix' => 'orders'], function () {
     Route::get('/', [\App\Http\Controllers\OrderController::class , 'index']);
     Route::get('/show', [\App\Http\Controllers\OrderController::class , 'show'])->middleware('auth:sanctum');
     Route::post('/', [\App\Http\Controllers\OrderController::class , 'store'])->middleware('auth:sanctum');
+    Route::put('/update-status', [\App\Http\Controllers\OrderController::class , 'updateStatus'])->middleware('auth:sanctum');
 
 });
 
