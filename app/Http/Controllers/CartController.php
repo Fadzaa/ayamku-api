@@ -17,7 +17,18 @@ class CartController extends Controller
     {
         $userId = Auth::id();
 
+
         $cart = Cart::all()->where('user_id', $userId)->first();
+
+        if (!$cart) {
+            return response()->json(
+                [
+                    'message' => 'This user has no cart yet.'
+                ],
+                404
+            );
+        }
+
         $cartItems = CartItem::with('product')->where('cart_id', $cart->id)->get();
 
         $totalPrice = 0;

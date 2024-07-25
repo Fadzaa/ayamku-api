@@ -67,7 +67,7 @@ class FavouriteFoodController extends Controller
             ], 401);
         }
         $favouriteFood = FavouriteFood::all()
-            ->where('product_id', $productId)
+            ->where('id', $productId)
             ->where('user_id', $user->id)
             ->first();
 

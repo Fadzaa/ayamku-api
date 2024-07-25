@@ -23,7 +23,7 @@ class VoucherRequest extends FormRequest
     {
         return [
             'code' => 'required|string|unique:vouchers,code',
-            'name' => 'required|string',
+//            'name' => 'required|string',
             'description' => 'nullable|string',
             'discount' => 'required|integer|min:0',
             'qty' => 'required|integer|min:0',

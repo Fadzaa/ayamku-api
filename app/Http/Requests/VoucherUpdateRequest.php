@@ -22,8 +22,7 @@ class VoucherUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'code' => 'string|unique:vouchers,code',
-            'name' => 'string',
+            'code' => 'string',
             'description' => 'nullable|string',
             'discount' => 'integer|min:0',
             'qty' => 'integer|min:0',

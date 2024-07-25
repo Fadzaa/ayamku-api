@@ -27,7 +27,8 @@ class UserController extends Controller
         return response()->json([
             'message' => 'User created successfully',
             'data' => new UserResource($user),
-            'token' => $user->createToken('auth_token')->plainTextToken
+            'token' => $user->createToken('auth_token')->plainTextToken,
+            'data_request' => $data
         ], 201);
 
     }
@@ -70,17 +71,18 @@ class UserController extends Controller
         $user = User::all()->where('id', Auth::id())->first();
 
         $user->fill($data);
-
-        if ($request->hasFile('profile_picture')) {
-            $path = $request->file('profile_picture')->storePublicly('profile_pictures', 'public');
-            $user->profile_picture = Storage::url($path);
-        }
-
+//
+////        if ($request->hasFile('profile_picture')) {
+////            $path = $request->file('profile_picture')->storePublicly('profile_pictures', 'public');
+////            $user->profile_picture = Storage::url($path);
+////        }
+//
         $user->save();
 
         return response()->json([
             'message' => 'User updated successfully',
-            'data' => new UserResource($user)
+            'data' => new UserResource($user),
+            'data_request' => $data
         ], 200);
     }
 
