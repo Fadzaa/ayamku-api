@@ -22,7 +22,7 @@ class ProductFactory extends Factory
             'description' => $this->faker->sentence,
             'price' => $this->faker->randomFloat(2, 1, 100),
             'category' => $this->faker->randomElement(['geprek', 'ricebowl', 'snack', 'minuman']),
-            'stock' => $this->faker->numberBetween(0, 100),
+//            'stock' => $this->faker->numberBetween(0, 100),
             'image' => 'https://d1vbn70lmn1nqe.cloudfront.net/prod/wp-content/uploads/2023/07/17055245/Rendah-Kalori-Ini-Resep-Ayam-Geprek-Pedas-Ala-Rumahan-.jpg',
         ];
     }

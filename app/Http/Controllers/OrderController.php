@@ -25,11 +25,20 @@ class OrderController extends Controller
     {
         $userId = Auth::id();
 
-        $orders = Order::all()->where('user_id', $userId)->first();
+        $orders = Order::all()->where('user_id', $userId);
+
+        if (!$orders) {
+            return response()->json(
+                [
+                    'message' => 'This user has no order yet.',
+                ],
+                404
+            );
+        }
 
         return response()->json(
             [
-                'data' => new OrderResource($orders),
+                'data' => OrderResource::collection($orders),
             ]
         );
     }

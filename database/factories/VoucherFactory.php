@@ -18,7 +18,7 @@ class VoucherFactory extends Factory
     {
         return [
             'code' => $this->faker->unique()->word,
-            'name' => $this->faker->word,
+//            'name' => $this->faker->word,
             'description' => $this->faker->text,
             'discount' => $this->faker->randomNumber(),
             'qty' => $this->faker->randomNumber(),
