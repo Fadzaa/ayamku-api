@@ -26,26 +26,34 @@ class OrderHistoryController extends Controller
         $userId = Auth::id();
 
         if ($userId) {
-            $orderQuery = Order::all()->where('user_id', $userId)
-                ->where('status' , 'completed');
+            $orderQuery = Order::query()->where('user_id', $userId)->where('status', 'completed');
 
             if ($request->has('filter')) {
-                $filter = $request->filter;
+
+                $filter = $request->query('filter');
 
                 if ($filter === 'latest') {
-                    $orderQuery->sortBy('created_at', 'desc');
-                } elseif ($filter === '7_days') {
+                    $orderQuery->orderBy('created_at', 'desc');
+                }
+
+                if ($filter === '7_days') {
                     $sevenDaysAgo = now()->subDays(7);
-                    $orderQuery->where('created_at', '>=', $sevenDaysAgo);
-                } elseif ($filter === 'custom_date' && $request->has('date')) {
-                    $customDate = $request->date;
-                    $orderQuery->where('created_at', $customDate);
+                    $orderQuery->whereDate('created_at', '>=', $sevenDaysAgo);
+                }
+
+                if ($filter === 'custom_date' && $request->has('date')) {
+                    $customDate = $request->query('date');
+                    $orderQuery->whereDate('created_at', $customDate);
                 }
             }
 
-            $order = $orderQuery;
+            $order = $orderQuery->get();
         } else {
-            $order = [];
+            return response()->json(
+                [
+                    'message' => 'User not found',
+                ]
+            );
         }
 
         return response()->json(

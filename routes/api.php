@@ -89,7 +89,7 @@ Route::group(['prefix' => 'carts'], function () {
 
     Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::post('/', [\App\Http\Controllers\CartController::class , 'storeCart']);
-        Route::delete('/{cartItemId}', [\App\Http\Controllers\CartController::class , 'deleteCartItem']);
+        Route::put('/update-qty', [\App\Http\Controllers\CartController::class , 'updateCartItem']);
     });
 
 });

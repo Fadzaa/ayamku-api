@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CartRequest;
+use App\Http\Requests\UpdateQtyCartitem;
 use App\Http\Resources\CartItemResource;
 use App\Http\Resources\CartResource;
 use App\Models\Cart;
@@ -99,39 +100,33 @@ class CartController extends Controller
         );
     }
 
-    public function deleteCartItem(Request $request): JsonResponse
-    {
-        $userId = Auth::id();
+    public function updateCartItem(UpdateQtyCartitem $request) : JsonResponse {
+        $data = $request->validated();
 
-        $cart = Cart::all()->where('user_id', $userId)->first();
+        $cartItem = CartItem::all()->where('id', $data['cart_item_id'])->first();
 
-        if ($cart->cart_id) {
-            return response()->json(
-                [
-                    'message' => 'Cart not found.',
-                ],
-                404
-            );
+        if ($cartItem) {
+            $cartItem->quantity = $data['quantity'];
+
+            if ($cartItem->quantity <= 0) {
+                $cartItem->delete();
+
+                return response()->json([
+                    'message' => 'Cart item removed successfully'
+                ]);
+            } else {
+                $cartItem->save();
+
+                return response()->json([
+                    'message' => 'Cart item updated successfully'
+                ]);
+            }
+        } else {
+            return response()->json([
+                'message' => 'Cart item not found',
+                'test' => $cartItem
+            ], 404);
         }
-
-        $cartItem = CartItem::all()->find($request->cartItemId);
-
-        if ($cartItem->id != $request->cartItemId) {
-            return response()->json(
-                [
-                    'message' => 'Cart item not found.',
-                ],
-                404
-            );
-        }
-
-        $cartItem->delete();
-
-        return response()->json(
-            [
-                'message' => 'Cart item deleted successfully.',
-            ]
-        );
     }
 
 
