@@ -8,6 +8,7 @@ use App\Http\Resources\CartItemResource;
 use App\Http\Resources\CartResource;
 use App\Models\Cart;
 use App\Models\CartItem;
+use App\Models\Product;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -43,6 +44,8 @@ class CartController extends Controller
 
         $cart->cartItems = $cartItemsArray;
         $cart->total_price = $totalPrice;
+
+
         return response()->json(
             [
                 'cart' => new CartResource($cart),
@@ -60,7 +63,7 @@ class CartController extends Controller
             return $this->addCartItem($cart->id ,$request);
         } else {
             $cart = new Cart();
-            $cart->user_id = $userId;
+            $cart['user_id'] = $userId;
             $cart->save();
 
             return $this->addCartItem($cart->id, $request);
@@ -75,12 +78,15 @@ class CartController extends Controller
             ->where('product_id', $data['product_id'])
             ->first();
 
+        $product = Product::all()->where('id', $data['product_id'])->first();
+
         if ($existingCartItem) {
             $existingCartItem->quantity += $data['quantity'];
             $existingCartItem->save();
         } else {
             $cartItem = new CartItem();
             $cartItem->cart_id = $cartId;
+            $cartItem->price = $product->price;
             $cartItem->fill($data);
             $cartItem->save();
 
