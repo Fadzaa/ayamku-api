@@ -17,12 +17,12 @@ class DatabaseSeeder extends Seeder
             PromoSeeder::class,
             PostSeeder::class,
             VoucherSeeder::class,
-            CartSeeder::class,
-            CartItemSeeder::class,
+//            CartSeeder::class,
+//            CartItemSeeder::class,
             AdminUserSeeder::class,
-            FavouriteFoodSeeder::class,
+//            FavouriteFoodSeeder::class,
             StoreStatusSeeder::class,
-            OrderSeeder::class,
+//            OrderSeeder::class,
             UserVoucherSeeder::class
         ]);
     }

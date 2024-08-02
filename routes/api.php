@@ -68,18 +68,16 @@ Route::group(['prefix' => 'posts'], function () {
 });
 
 Route::group(['prefix' => 'vouchers'], function () {
-    Route::get('/', [\App\Http\Controllers\VoucherController::class , 'index']);
-    Route::get('/show', [\App\Http\Controllers\VoucherController::class , 'currentUserVoucher']);
-    Route::post('/give', [\App\Http\Controllers\VoucherController::class , 'giveVoucher']);
-    Route::post('/redeem', [\App\Http\Controllers\VoucherController::class , 'redeemVoucher'])->middleware('auth:sanctum');
+    Route::group(['middleware' => 'auth:sanctum'], function () {
+        Route::get('/show', [\App\Http\Controllers\VoucherController::class , 'currentUserVoucher']);
+        Route::post('/redeem', [\App\Http\Controllers\VoucherController::class , 'redeemVoucher']);
+    });
 
     Route::group(['middleware' => ['auth:sanctum', 'admin']], function () {
+        Route::get('/', [\App\Http\Controllers\VoucherController::class , 'index']);
         Route::post('/', [\App\Http\Controllers\VoucherController::class , 'store']);
         Route::put('/{id}', [\App\Http\Controllers\VoucherController::class , 'update']);
         Route::delete('/{id}', [\App\Http\Controllers\VoucherController::class , 'destroy']);
-    });
-
-    Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::post('/give', [\App\Http\Controllers\VoucherController::class , 'giveVoucher']);
     });
 });
@@ -99,7 +97,7 @@ Route::group(['prefix' => 'orders'], function () {
     Route::get('/show', [\App\Http\Controllers\OrderController::class , 'show'])->middleware('auth:sanctum');
     Route::post('/', [\App\Http\Controllers\OrderController::class , 'store'])->middleware('auth:sanctum');
     Route::put('/update-status', [\App\Http\Controllers\OrderController::class , 'updateStatus'])->middleware('auth:sanctum');
-
+    Route::put('/apply-voucher', [\App\Http\Controllers\OrderController::class , 'applyVoucher'])->middleware('auth:sanctum');
 });
 
 Route::post('/payments', [\App\Http\Controllers\PaymentController::class , 'create']);

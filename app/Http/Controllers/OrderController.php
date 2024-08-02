@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ApplyVoucherRequest;
 use App\Http\Requests\OrderRequest;
 use App\Http\Requests\OrderStatusChangeRequest;
 use App\Http\Resources\OrderResource;
 use App\Models\Order;
+use App\Models\UserVoucher;
+use App\Models\Voucher;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 
@@ -62,7 +65,7 @@ class OrderController extends Controller
         return response()->json(
             [
                 'message' => 'Order created successfully',
-                'data' => $order,
+                'data' => new OrderResource($order),
             ],
             201
         );
@@ -94,6 +97,77 @@ class OrderController extends Controller
             ]
         );
     }
+
+    public function applyVoucher(ApplyVoucherRequest $request) : JsonResponse {
+        $data = $request->validated();
+
+        $order = Order::all()->where('id', $data['order_id'])->first();
+
+        $voucherUser = UserVoucher::all()->where('user_id', Auth::id())->where('id', $data['voucher_user_id'])->first();
+
+        $voucher = Voucher::all()->where('id', $voucherUser->voucher_id)->first();
+
+
+        if (!$voucher) {
+            return response()->json(
+                [
+                    'message' => 'Voucher not found',
+                ],
+                404
+            );
+        }
+
+        if (!$order) {
+            return response()->json(
+                [
+                    'message' => 'Order not found',
+                ],
+                404
+            );
+        }
+
+        if ($voucher->start_date > now() || $voucher->end_date < now()) {
+            return response()->json(
+                [
+                    'message' => 'Voucher is expired',
+                ],
+                400
+            );
+        }
+
+        if ($voucherUser->used) {
+            return response()->json(
+                [
+                    'message' => 'Voucher is already used',
+                ],
+                400
+            );
+        }
+
+
+        $order->voucher_id = $voucher->id;
+
+        $cartItems = $order->cart->cartItems;
+        $order_amount = 0;
+
+        foreach ($cartItems as $cartItem) {
+            $order_amount += $cartItem->price * $cartItem->quantity;
+            $order->discount_amount = $order_amount * $voucher->discount / 100;
+            $order->final_amount = $order_amount - $order->discount_amount;
+        }
+
+        $voucherUser->used = true;
+
+        $order->save();
+        $voucherUser->save();
+
+        return response()->json(
+            [
+                'message' => 'Voucher applied successfully'
+            ]
+        );
+    }
+
 
     public function orderSummary() : JsonResponse
     {
