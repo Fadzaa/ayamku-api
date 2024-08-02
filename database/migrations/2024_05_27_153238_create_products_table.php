@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name')->unique();
             $table->text('description');
             $table->enum('category', ['geprek', 'ricebowl', 'snack', 'minuman'])->default('geprek');
-            $table->decimal('price', 8, 2);
+            $table->integer('price')->default(0);
             $table->decimal('rating', 2, 1)->default(0);
 //            $table->unsignedInteger('stock')->default(0);
             $table->string('image');

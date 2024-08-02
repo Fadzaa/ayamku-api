@@ -6,6 +6,7 @@ use App\Http\Requests\GiveVoucherRequest;
 use App\Http\Requests\VoucherRequest;
 use App\Http\Requests\VoucherUpdateRequest;
 use App\Http\Resources\VoucherResource;
+use App\Http\Resources\VoucherUserResource;
 use App\Models\UserVoucher;
 use App\Models\Voucher;
 use Illuminate\Http\JsonResponse;
@@ -64,10 +65,12 @@ class VoucherController extends Controller
     public function currentUserVoucher() : JsonResponse
     {
         $userId = Auth::id();
-        $vouchers = Voucher::all()->where('user_id', $userId);
+
+        $vouchersUser = UserVoucher::all()->where('user_id', $userId);
+
 
         return response()->json([
-            'data' => VoucherResource::collection($vouchers)
+            'data' => VoucherUserResource::collection($vouchersUser)
         ]);
     }
 

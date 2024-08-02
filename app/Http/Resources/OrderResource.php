@@ -24,6 +24,9 @@ class OrderResource extends JsonResource
                 'cartItems' => CartItemResource::collection($this->cart->cartItems),
             ],
             'post' => new PostResource($this->post),
+            'voucher' => new VoucherResource($this->voucher),
+            'discount_amount' => $this->discount_amount,
+            'final_amount' => $this->final_amount,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

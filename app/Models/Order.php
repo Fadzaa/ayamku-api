@@ -26,4 +26,9 @@ class Order extends Model
     {
         return $this->belongsTo(Post::class, 'posts_id');
     }
+
+    public function voucher()
+    {
+        return $this->belongsTo(Voucher::class);
+    }
 }

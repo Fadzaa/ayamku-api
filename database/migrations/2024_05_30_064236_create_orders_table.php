@@ -18,6 +18,11 @@ return new class extends Migration
             $table->enum('method_type', ['on_delivery', 'pickup'])->default('on_delivery');
             $table->foreignId('posts_id')->constrained()->cascadeOnDelete();
             $table->enum('status', ['processing', 'completed', 'accept', 'cancelled'])->default('processing');
+
+            $table->foreignId('voucher_id')->nullable()->constrained()->cascadeOnDelete();
+            $table->integer('discount_amount')->default(0);
+            $table->integer('final_amount')->default(0);
+
             $table->timestamps();
         });
     }

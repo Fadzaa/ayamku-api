@@ -26,7 +26,7 @@ class VoucherRequest extends FormRequest
 //            'name' => 'required|string',
             'description' => 'nullable|string',
             'discount' => 'required|integer|min:0',
-            'qty' => 'required|integer|min:0',
+//            'qty' => 'required|integer|min:0',
             'start_date' => 'required|date|min:0',
             'end_date' => 'required|date|min:0',
         ];

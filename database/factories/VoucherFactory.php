@@ -20,8 +20,8 @@ class VoucherFactory extends Factory
             'code' => $this->faker->unique()->word,
 //            'name' => $this->faker->word,
             'description' => $this->faker->text,
-            'discount' => $this->faker->randomNumber(),
-            'qty' => $this->faker->randomNumber(),
+            'discount' => $this->faker->randomNumber(2),
+//            'qty' => $this->faker->randomNumber(),
             //faker start_date with random date
             'start_date' => $this->faker->date(),
             'end_date' => $this->faker->date()

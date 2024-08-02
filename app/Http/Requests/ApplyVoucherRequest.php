@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class GiveVoucherRequest extends FormRequest
+class ApplyVoucherRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,8 +22,8 @@ class GiveVoucherRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'voucher_id' => 'required|exists:vouchers,id',
-            'user_id' => 'required|exists:users,id',
+            'voucher_user_id' => 'required|exists:user_vouchers,id',
+            'order_id' => 'required|exists:orders,id'
         ];
     }
 }
