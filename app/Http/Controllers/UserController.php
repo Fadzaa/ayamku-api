@@ -8,6 +8,7 @@ use App\Http\Requests\UserRequest\RegisterRequest;
 use App\Http\Requests\UserRequest\UpdateUserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use App\Notifications\TestNotification;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -23,6 +24,8 @@ class UserController extends Controller
         $user->password = Hash::make($data['password']);
 
         $user->save();
+
+        $user->notify(new TestNotification());
 
         return response()->json([
             'message' => 'User created successfully',
