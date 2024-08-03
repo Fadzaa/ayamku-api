@@ -18,11 +18,7 @@ class OrderController extends Controller
     {
         $orders = Order::all();
 
-        return response()->json(
-            [
-                'data' => OrderResource::collection($orders),
-            ]
-        );
+        return $this->OrderShiftResponse($orders);
     }
 
     public function show() : JsonResponse
@@ -40,11 +36,7 @@ class OrderController extends Controller
             );
         }
 
-        return response()->json(
-            [
-                'data' => OrderResource::collection($orders),
-            ]
-        );
+        return $this->OrderShiftResponse($orders);
     }
 
     public function store(OrderRequest $request) : JsonResponse
@@ -60,13 +52,30 @@ class OrderController extends Controller
         $order->posts_id = $data['posts_id'];
         $order->status = 'processing';
 
-        $voucherResponse = $this->applyVoucher($data['user_voucher_id'], $order);
+        if (isset($data['pickup_time']) && $data['method_type'] === 'pickup') {
+            $order->pickup_time = $data['pickup_time'];
+        }
 
-        if ($voucherResponse instanceof JsonResponse) {
-            return $voucherResponse;
+        if (isset($data['user_voucher_id'])) {
+            $voucherResponse = $this->applyVoucher($data['user_voucher_id'], $order);
+
+            if ($voucherResponse instanceof JsonResponse) {
+                return $voucherResponse;
+            }
         }
 
         $order->save();
+
+        if ($order['method_type'] === 'on_delivery') {
+            $created_at = now()->setTime(9, 50);
+
+            if ($created_at->format('H.i') < 9.30) {
+                $order->shift_delivery = "09.40";
+            } else {
+                $order->shift_delivery = "12.00";
+            }
+        }
+
 
         return response()->json(
             [
@@ -184,6 +193,31 @@ class OrderController extends Controller
                 'total_order_canceled' => $totalOrderCanceled,
                 'total_order_delivery' => $totalOrderDelivery,
                 'total_order_pickup' => $totalOrderPickup,
+            ]
+        );
+    }
+
+    /**
+     * @param \Illuminate\Database\Eloquent\Collection $orders
+     * @return JsonResponse
+     */
+    public function OrderShiftResponse(\Illuminate\Database\Eloquent\Collection $orders): JsonResponse
+    {
+        foreach ($orders as $order) {
+            if ($order['method_type'] === 'on_delivery') {
+                $created_at = now()->setTime(9, 25);
+
+                if ($created_at->format('H.i') < 9.30) {
+                    $order->shift_delivery = "09.40";
+                } else {
+                    $order->shift_delivery = "12.00";
+                }
+            }
+        }
+
+        return response()->json(
+            [
+                'data' => OrderResource::collection($orders),
             ]
         );
     }

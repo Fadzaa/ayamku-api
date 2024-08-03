@@ -17,6 +17,8 @@ class OrderResource extends JsonResource
         return [
             'id' => $this->id,
             'method_type' => $this->method_type,
+            'pickup_time' => $this->pickup_time,
+            'shift_delivery' => $this->shift_delivery,
             'status' => $this->status,
             'user' => new UserResource($this->user),
             'cart' => [
