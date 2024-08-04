@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('cart_id')->constrained()->cascadeOnDelete();
             $table->enum('method_type', ['on_delivery', 'pickup'])->default('on_delivery');
             $table->foreignId('posts_id')->constrained()->cascadeOnDelete();
-            $table->enum('status', ['processing', 'completed', 'accept', 'cancelled'])->default('processing');
+            $table->enum('status', ['processing', 'completed', 'accept', 'cancelled', 'confirmed_order'])->default('processing');
             $table->time('pickup_time')->nullable();
 
             $table->foreignId('voucher_id')->nullable()->constrained()->cascadeOnDelete();

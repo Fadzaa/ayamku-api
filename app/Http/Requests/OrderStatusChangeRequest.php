@@ -23,7 +23,7 @@ class OrderStatusChangeRequest extends FormRequest
     {
         return [
             'order_id' => 'required|integer|exists:carts,id',
-            'status' => 'required|string|in:completed,accept,cancelled',
+            'status' => 'required|string|in:completed,accept,cancelled,confirmed_order',
 //            'status' => 'required|string|max:255',
         ];
     }
