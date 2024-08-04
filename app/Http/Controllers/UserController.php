@@ -25,13 +25,10 @@ class UserController extends Controller
 
         $user->save();
 
-        $user->notify(new TestNotification());
-
         return response()->json([
             'message' => 'User created successfully',
             'data' => new UserResource($user),
             'token' => $user->createToken('auth_token')->plainTextToken,
-            'data_request' => $data
         ], 201);
 
     }
@@ -40,15 +37,23 @@ class UserController extends Controller
     {
         $data = $request->validated();
 
-        if (!Auth::attempt($data)) {
+        if (!Auth::attempt(['email' => $data['email'], 'password' => $data['password']])) {
             return response()->json([
                 'message' => 'Invalid credentials'
             ], 401);
         }
 
+        if (isset($data['fcm_token'])) {
+            $user = User::all()->where('email', $data['email'])->first();
+            $user->fcm_token = $data['fcm_token'];
+            $user->save();
+        }
+
         $user = User::all()->where('email', $data['email'])->first();
 
         $token = $user->createToken('auth_token')->plainTextToken;
+
+        $user->notify(new TestNotification());
 
         return response()->json([
             'message' => 'Login successful',
