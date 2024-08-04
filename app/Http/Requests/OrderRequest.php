@@ -25,6 +25,8 @@ class OrderRequest extends FormRequest
             'cart_id' => 'required|integer|exists:carts,id',
             'method_type' => 'required|string|in:on_delivery,pickup',
             'posts_id' => 'required|integer|exists:posts,id',
+            'user_voucher_id' => 'nullable|integer',
+            'pickup_time' => 'nullable|date_format:H:i',
 //            'status' => 'required|string|max:255',
         ];
     }

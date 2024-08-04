@@ -18,11 +18,7 @@ class OrderController extends Controller
     {
         $orders = Order::all();
 
-        return response()->json(
-            [
-                'data' => OrderResource::collection($orders),
-            ]
-        );
+        return $this->OrderShiftResponse($orders);
     }
 
     public function show() : JsonResponse
@@ -40,11 +36,7 @@ class OrderController extends Controller
             );
         }
 
-        return response()->json(
-            [
-                'data' => OrderResource::collection($orders),
-            ]
-        );
+        return $this->OrderShiftResponse($orders);
     }
 
     public function store(OrderRequest $request) : JsonResponse
@@ -53,14 +45,37 @@ class OrderController extends Controller
 
         $userId = Auth::id();
 
-        $data['user_id'] = $userId;
-
         $order = new Order();
-        $order->fill($data);
-
+        $order->user_id = $userId;
+        $order->cart_id = $data['cart_id'];
+        $order->method_type = $data['method_type'];
+        $order->posts_id = $data['posts_id'];
         $order->status = 'processing';
 
+        if (isset($data['pickup_time']) && $data['method_type'] === 'pickup') {
+            $order->pickup_time = $data['pickup_time'];
+        }
+
+        if (isset($data['user_voucher_id'])) {
+            $voucherResponse = $this->applyVoucher($data['user_voucher_id'], $order);
+
+            if ($voucherResponse instanceof JsonResponse) {
+                return $voucherResponse;
+            }
+        }
+
         $order->save();
+
+        if ($order['method_type'] === 'on_delivery') {
+            $created_at = now()->setTime(9, 50);
+
+            if ($created_at->format('H.i') < 9.30) {
+                $order->shift_delivery = "09.40";
+            } else {
+                $order->shift_delivery = "12.00";
+            }
+        }
+
 
         return response()->json(
             [
@@ -71,39 +86,17 @@ class OrderController extends Controller
         );
     }
 
-    public function updateStatus(OrderStatusChangeRequest $request) : JsonResponse
-    {
-        $data = $request->validated();
+    public function applyVoucher($user_voucher_id, Order $order) :?JsonResponse  {
+        $voucherUser = UserVoucher::all()->where('user_id', Auth::id())->where('id', $user_voucher_id)->first();
 
-        $order = Order::all()->where('id', $data['order_id'])->first();
-
-        if (!$order) {
+        if (!$voucherUser) {
             return response()->json(
                 [
-                    'message' => 'Order not found',
+                    'message' => 'This user does not have this voucher',
                 ],
                 404
             );
         }
-
-        $order->status = $data['status'];
-
-        $order->save();
-
-        return response()->json(
-            [
-                'message' => 'Order status updated successfully',
-                'data' => $order,
-            ]
-        );
-    }
-
-    public function applyVoucher(ApplyVoucherRequest $request) : JsonResponse {
-        $data = $request->validated();
-
-        $order = Order::all()->where('id', $data['order_id'])->first();
-
-        $voucherUser = UserVoucher::all()->where('user_id', Auth::id())->where('id', $data['voucher_user_id'])->first();
 
         $voucher = Voucher::all()->where('id', $voucherUser->voucher_id)->first();
 
@@ -117,14 +110,6 @@ class OrderController extends Controller
             );
         }
 
-        if (!$order) {
-            return response()->json(
-                [
-                    'message' => 'Order not found',
-                ],
-                404
-            );
-        }
 
         if ($voucher->start_date > now() || $voucher->end_date < now()) {
             return response()->json(
@@ -158,15 +143,39 @@ class OrderController extends Controller
 
         $voucherUser->used = true;
 
-        $order->save();
         $voucherUser->save();
+
+        return null;
+    }
+
+    public function updateStatus(OrderStatusChangeRequest $request) : JsonResponse
+    {
+        $data = $request->validated();
+
+        $order = Order::all()->where('id', $data['order_id'])->first();
+
+        if (!$order) {
+            return response()->json(
+                [
+                    'message' => 'Order not found',
+                ],
+                404
+            );
+        }
+
+        $order->status = $data['status'];
+
+        $order->save();
 
         return response()->json(
             [
-                'message' => 'Voucher applied successfully'
+                'message' => 'Order status updated successfully',
+                'data' => $order,
             ]
         );
     }
+
+
 
 
     public function orderSummary() : JsonResponse
@@ -184,6 +193,31 @@ class OrderController extends Controller
                 'total_order_canceled' => $totalOrderCanceled,
                 'total_order_delivery' => $totalOrderDelivery,
                 'total_order_pickup' => $totalOrderPickup,
+            ]
+        );
+    }
+
+    /**
+     * @param \Illuminate\Database\Eloquent\Collection $orders
+     * @return JsonResponse
+     */
+    public function OrderShiftResponse(\Illuminate\Database\Eloquent\Collection $orders): JsonResponse
+    {
+        foreach ($orders as $order) {
+            if ($order['method_type'] === 'on_delivery') {
+                $created_at = now()->setTime(9, 25);
+
+                if ($created_at->format('H.i') < 9.30) {
+                    $order->shift_delivery = "09.40";
+                } else {
+                    $order->shift_delivery = "12.00";
+                }
+            }
+        }
+
+        return response()->json(
+            [
+                'data' => OrderResource::collection($orders),
             ]
         );
     }
