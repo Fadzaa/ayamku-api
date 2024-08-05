@@ -16,14 +16,38 @@ class ProductFactory extends Factory
      */
     public function definition(): array
     {
+        $category = $this->faker->randomElement(['geprek', 'ricebowl', 'snack', 'minuman']);
+
+        $categoryData = [
+            'geprek' => [
+                'name' => 'Ayam Geprek Original',
+                'image' => 'https://thumbs.dreamstime.com/z/ayam-geprek-indonesian-food-crispy-fried-chicken-hot-spicy-sambal-chili-sauce-served-steam-rice-recipe-currently-found-215159621.jpg?w=768',
+                'description' => 'Ayam geprek original'
+            ],
+            'ricebowl' => [
+                'name' => 'Ricebowl BBQ',
+                'image' => 'https://img.freepik.com/premium-photo/spicy-yummy-chicken-rice-bowl-with-vegetables-isolated-white-background_787273-29390.jpg',
+                'description' => 'Ricebowl chicken saus bbq'
+            ],
+            'snack' => [
+                'name' => 'Kentang Goreng',
+                'image' => 'https://www.dairyqueen.com/dA/0851e38bb2/chicken_strips_fry_rings.png',
+                'description' => 'Kentang goreng'
+            ],
+            'minuman' => [
+                'name' => 'Es Teh',
+                'image' => 'https://static.vecteezy.com/system/resources/previews/027/254/417/original/delicious-ice-tea-png.png',
+                'description' => 'Es teh manis'
+            ],
+        ];
+
+
         return [
-            //unique food name
-            'name' => $this->faker->unique()->word,
-            'description' => $this->faker->sentence,
-            'price' => $this->faker->randomFloat(2, 1, 100),
-            'category' => $this->faker->randomElement(['geprek', 'ricebowl', 'snack', 'minuman']),
-//            'stock' => $this->faker->numberBetween(0, 100),
-            'image' => 'https://d1vbn70lmn1nqe.cloudfront.net/prod/wp-content/uploads/2023/07/17055245/Rendah-Kalori-Ini-Resep-Ayam-Geprek-Pedas-Ala-Rumahan-.jpg',
+            'name' => $categoryData[$category]['name'],
+            'description' => $categoryData[$category]['description'],
+            'price' => $this->faker->numberBetween(10000, 20000),
+            'category' => $category,
+            'image' => $categoryData[$category]['image'],
         ];
     }
 }

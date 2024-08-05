@@ -17,9 +17,9 @@ class VoucherFactory extends Factory
     public function definition(): array
     {
         return [
-            'code' => $this->faker->unique()->word,
+            'code' => 'VOUCHERPENGGUNABARU',
 //            'name' => $this->faker->word,
-            'description' => $this->faker->text,
+            'description' => 'Voucher Pengguna Baru',
             'discount' => $this->faker->randomNumber(2),
 //            'qty' => $this->faker->randomNumber(),
             //faker start_date with random date

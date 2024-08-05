@@ -6,6 +6,8 @@ use App\Http\Requests\PromoRequest\PromoRequest;
 use App\Http\Requests\PromoRequest\PromoUpdateRequest;
 use App\Http\Resources\PromoResource;
 use App\Models\Promo;
+use App\Models\User;
+use App\Notifications\NewPromoNotification;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -46,11 +48,17 @@ class PromoController extends Controller
 
         if ($request->hasFile('image')) {
             $image = $request->file('image')->storePublicly('promos', 'public');
-            $data['image'] = Storage::url($image);
+            $data['image'] = url(Storage::url($image));
         }
 
         $promo->fill($data);
         $promo->save();
+
+        $users = User::all();
+
+        foreach ($users as $user) {
+            $user->notify(new NewPromoNotification($promo));
+        }
 
         return response()->json(
             [

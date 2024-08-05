@@ -17,8 +17,8 @@ class PromoFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->unique()->word,
-            'description' => $this->faker->sentence,
+            'name' => 'Promo Sumpah Pemuda',
+            'description' => 'Beli 1 gratis 1 paket ayam geprek',
             'qty' => $this->faker->randomNumber(2),
             'start_date' => $this->faker->date(),
             'end_date' => $this->faker->date(),

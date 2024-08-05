@@ -14,7 +14,7 @@ class PromoSeeder extends Seeder
     public function run(): void
     {
         Promo::factory()
-            ->count(5)
+            ->count(1)
             ->create();
     }
 }
