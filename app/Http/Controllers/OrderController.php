@@ -7,8 +7,11 @@ use App\Http\Requests\OrderRequest;
 use App\Http\Requests\OrderStatusChangeRequest;
 use App\Http\Resources\OrderResource;
 use App\Models\Order;
+use App\Models\User;
 use App\Models\UserVoucher;
 use App\Models\Voucher;
+use App\Notifications\NewOrderNotification;
+use App\Notifications\OrderStatusChangedNotification;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 
@@ -62,6 +65,14 @@ class OrderController extends Controller
             if ($voucherResponse instanceof JsonResponse) {
                 return $voucherResponse;
             }
+        } else {
+            $cartItems = $order->cart->cartItems;
+            $order_amount = 0;
+
+            foreach ($cartItems as $cartItem) {
+                $order_amount += $cartItem->price * $cartItem->quantity;
+                $order->final_amount = $order_amount;
+            }
         }
 
         $order->save();
@@ -76,11 +87,15 @@ class OrderController extends Controller
             }
         }
 
+        $admin = User::all()->where('role', 'admin')->first();
+
+        $admin->notify(new NewOrderNotification($order));
 
         return response()->json(
             [
                 'message' => 'Order created successfully',
                 'data' => new OrderResource($order),
+                'testAdmin' => $admin,
             ],
             201
         );
@@ -166,6 +181,10 @@ class OrderController extends Controller
         $order->status = $data['status'];
 
         $order->save();
+
+        $user = User::all()->where('id', $order->user_id)->first();
+
+        $user->notify(new OrderStatusChangedNotification($order->status));
 
         return response()->json(
             [

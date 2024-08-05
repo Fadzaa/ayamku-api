@@ -6,6 +6,8 @@ use App\Http\Requests\ProductRequest\ProductRequest;
 use App\Http\Requests\ProductRequest\ProductUpdateRequest;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
+use App\Models\User;
+use App\Notifications\NewProductNotification;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -71,7 +73,7 @@ class ProductController extends Controller
 
         if ($request->hasFile('image')) {
             $image = $request->file('image')->storePublicly('products', 'public');
-            $product->image = Storage::url($image);
+            $product->image = url(Storage::url($image));
         }else {
             return response()->json([
                 'message' => 'Image not found',
@@ -79,6 +81,12 @@ class ProductController extends Controller
         }
 
         $product->save();
+
+        $users = User::all();
+
+        foreach ($users as $user) {
+            $user->notify(new NewProductNotification($product));
+        }
 
         return response()->json([
             'data' => new ProductResource($product),

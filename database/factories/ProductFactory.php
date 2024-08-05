@@ -20,27 +20,31 @@ class ProductFactory extends Factory
 
         $categoryData = [
             'geprek' => [
-                'name' => 'Geprek Sample',
-                'image' => 'https://png.pngtree.com/png-clipart/20230319/original/pngtree-sweet-cheese-geprek-chicken-png-image_8995918.png',
+                'name' => 'Ayam Geprek Original',
+                'image' => 'https://thumbs.dreamstime.com/z/ayam-geprek-indonesian-food-crispy-fried-chicken-hot-spicy-sambal-chili-sauce-served-steam-rice-recipe-currently-found-215159621.jpg?w=768',
+                'description' => 'Ayam geprek original'
             ],
             'ricebowl' => [
-                'name' => 'Ricebowl Sample',
+                'name' => 'Ricebowl BBQ',
                 'image' => 'https://img.freepik.com/premium-photo/spicy-yummy-chicken-rice-bowl-with-vegetables-isolated-white-background_787273-29390.jpg',
+                'description' => 'Ricebowl chicken saus bbq'
             ],
             'snack' => [
-                'name' => 'Snack',
+                'name' => 'Kentang Goreng',
                 'image' => 'https://www.dairyqueen.com/dA/0851e38bb2/chicken_strips_fry_rings.png',
+                'description' => 'Kentang goreng'
             ],
             'minuman' => [
-                'name' => 'Minuman',
+                'name' => 'Es Teh',
                 'image' => 'https://static.vecteezy.com/system/resources/previews/027/254/417/original/delicious-ice-tea-png.png',
+                'description' => 'Es teh manis'
             ],
         ];
 
 
         return [
             'name' => $categoryData[$category]['name'],
-            'description' => $this->faker->sentence,
+            'description' => $categoryData[$category]['description'],
             'price' => $this->faker->numberBetween(10000, 20000),
             'category' => $category,
             'image' => $categoryData[$category]['image'],
