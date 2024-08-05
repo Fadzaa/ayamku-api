@@ -12,25 +12,34 @@ class AnalyticController extends Controller
     public function salesSummary(Request $request) {
         $filter = $request->get('filter', 'today');
 
-        $query = Order::join('carts', 'orders.cart_id', '=', 'carts.id')
-            ->join('cart_items', 'carts.id', '=', 'cart_items.cart_id');
+        $query = Order::query();
 
         switch ($filter) {
             case 'today':
-                $query->whereDate('orders.created_at', date('Y-m-d'));
+                $query->whereDate('created_at', date('Y-m-d'));
                 break;
             case 'week':
-                $query->whereBetween('orders.created_at', [now()->startOfWeek(), now()->endOfWeek()]);
+                $query->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()]);
                 break;
             case 'month':
-                $query->whereMonth('orders.created_at', date('m'));
+                $query->whereMonth('created_at', date('m'));
                 break;
         }
 
-        $total_sales = $query->sum(DB::raw('cart_items.quantity * cart_items.price'));
+        $total_sales = $query->sum('final_amount');
         $total_order = $query->count();
 
-        $total_product = StoreStatus::all()->pluck('stock_product');
+        $total_product = 0;
+
+        foreach ($query->get() as $order) {
+            $order->cart->cartItems->each(function ($item) use (&$total_product) {
+                $total_product += $item->quantity;
+            });
+        }
+
+
+
+
 
         $data = [
             'total_sales' => $total_sales,

@@ -13,6 +13,7 @@ use App\Models\Voucher;
 use App\Notifications\NewOrderNotification;
 use App\Notifications\OrderStatusChangedNotification;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
@@ -197,9 +198,25 @@ class OrderController extends Controller
 
 
 
-    public function orderSummary() : JsonResponse
+    public function orderSummary(Request $request) : JsonResponse
     {
-        $orders = Order::all()->where('timestamps', now());
+        $filter = $request->get('filter', 'today');
+
+        $query = Order::query();
+
+        switch ($filter) {
+            case 'today':
+                $query->whereDate('created_at', date('Y-m-d'));
+                break;
+            case 'week':
+                $query->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()]);
+                break;
+            case 'month':
+                $query->whereMonth('created_at', date('m'));
+                break;
+        }
+
+        $orders = $query->get();
 
         $totalOrder = $orders->count();
         $totalOrderCanceled = $orders->where('status', 'canceled')->count();

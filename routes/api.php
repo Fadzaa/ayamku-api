@@ -73,8 +73,9 @@ Route::group(['prefix' => 'vouchers'], function () {
         Route::post('/redeem', [\App\Http\Controllers\VoucherController::class , 'redeemVoucher']);
     });
 
+    Route::get('/', [\App\Http\Controllers\VoucherController::class , 'index']);
+
     Route::group(['middleware' => ['auth:sanctum', 'admin']], function () {
-        Route::get('/', [\App\Http\Controllers\VoucherController::class , 'index']);
         Route::post('/', [\App\Http\Controllers\VoucherController::class , 'store']);
         Route::put('/{id}', [\App\Http\Controllers\VoucherController::class , 'update']);
         Route::delete('/{id}', [\App\Http\Controllers\VoucherController::class , 'destroy']);
@@ -97,6 +98,7 @@ Route::group(['prefix' => 'orders'], function () {
     Route::get('/show', [\App\Http\Controllers\OrderController::class , 'show'])->middleware('auth:sanctum');
     Route::post('/', [\App\Http\Controllers\OrderController::class , 'store'])->middleware('auth:sanctum');
     Route::put('/update-status', [\App\Http\Controllers\OrderController::class , 'updateStatus'])->middleware('auth:sanctum');
+    Route::get('/order-summary', [\App\Http\Controllers\OrderController::class , 'orderSummary'])->middleware('auth:sanctum', 'admin');
 });
 
 Route::post('/payments', [\App\Http\Controllers\PaymentController::class , 'create']);
@@ -124,3 +126,5 @@ Route::group(['prefix' => 'reviews'], function () {
     Route::put('/{id}', [\App\Http\Controllers\ReviewController::class , 'update']);
     Route::delete('/{id}', [\App\Http\Controllers\ReviewController::class , 'destroy']);
 });
+
+Route::get('/sales-summary', [\App\Http\Controllers\AnalyticController::class , 'salesSummary']);
